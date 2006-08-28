@@ -1,0 +1,21 @@
+GTK Sudoku: A Logic Puzzle Solving Aid
+
+A Sodoku logic puzzle is solved by filling each cell in a board so
+that every row, column, and 3x3 square contains the digits one through
+nine.  This program eliminates much of the drudgery of solving a
+puzzle and provides educational tips should the path to the solution
+become obscured.
+
+This program requires GTK+ 2.0 version 2.8.0 or higher.
+
+QUICK START
+
+./configure
+./make
+src/gtksudoku [file-name] &
+
+Read the introduction in the help menu.
+
+See INSTALL for complete installation instructions.
+
+GTK Sudoku is a product of the Looney Fun Factory.

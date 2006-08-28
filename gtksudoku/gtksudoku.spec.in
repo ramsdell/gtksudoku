@@ -1,0 +1,44 @@
+Name:		@PACKAGE@
+Version:	@VERSION@
+Release:	1
+Source:		%{name}-%{version}.tar.gz
+Vendor:		Looney Fun Factory
+
+URL:		@PACKAGE_BUGREPORT@
+Packager:	John D. Ramsdell
+BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}-buildroot
+
+Summary:	A Sudoku Game
+License:	GPL
+Group:		Amusements/Games
+
+Requires:	gtk+2.0 >= 2.8.0
+
+%description
+
+@PACKAGE_NAME@: A Logic Puzzle Solving Aid
+
+A Sudoku logic puzzle is solved by filling each cell in a board so
+that every row, column, and 3x3 square contains the digits one through
+nine.  This program eliminates much of the drudgery of solving a
+puzzle and provides educational tips should the path to the solution
+become obscured.
+
+%prep
+%setup -q
+
+%build
+%configure
+make
+
+%install
+rm -rf %{buildroot}
+%makeinstall
+
+%clean
+rm -rf %{buildroot}
+
+%files
+%defattr (-, root, root)
+%{_bindir}/%{name}
+%{_datadir}/%{name}.html
