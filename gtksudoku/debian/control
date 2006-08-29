@@ -1,0 +1,16 @@
+Source: gtksudoku
+Section: games
+Priority: optional
+Maintainer: John D. Ramsdell <ramsdell@mitre.org>
+Build-Depends: debhelper (>= 4.0.0), autotools-dev
+Standards-Version: 3.6.2
+
+Package: gtksudoku
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Description: GTK Sudoku: A Logic Puzzle Solving Aid
+ A Sudoku logic puzzle is solved by filling each cell in a board so
+ that every row, column, and 3x3 square contains the digits one
+ through nine.  This program eliminates much of the drudgery of
+ solving a puzzle and provides educational tips should the path to the
+ solution become obscured.
