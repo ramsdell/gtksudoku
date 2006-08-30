@@ -1,3 +1,9 @@
+2006-08-30  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/grid.xpm: Added a default Icon for each window.
+
+	* src/grid.rc: Added a resource file for Windows.
+
 2006-08-25  John D. Ramsdell  <ramsdell@mitre.org>
 
 	*  Tagged 0.0: Initial release

@@ -1,13 +1,19 @@
 bin_PROGRAMS = gtksudoku
 noinst_LIBRARIES = liblua.a
-noinst_PROGRAMS = bin2c
+noinst_PROGRAMS = bin2c u2d
+
+if HAVE_WINDRES
+  grid_resource = grid.$(OBJEXT)
+else
+  grid_resource =
+endif
 
 gtksudoku_SOURCES = gtksudoku.h gtksudoku.c sudokuedit.h sudokuedit.c	\
 sudokuboard.h sudokuboard.c sudokucell.h sudokucell.c interp.h		\
 interp.c showtext.h showtext.c board.h board.c
 
 nodist_gtksudoku_SOURCES = sudoku.h sudokuboardmarshallers.h	\
-sudokuboardmarshallers.c
+sudokuboardmarshallers.c grid.h
 
 liblua_a_SOURCES = lapi.c ldebug.h liolib.c lobject.h lstring.h		\
 luaconf.h lapi.h ldo.c llex.c lopcodes.c lstrlib.c lua.h print.c	\
@@ -19,9 +25,13 @@ loadlib.c lstate.h lua.c lzio.c ldebug.c linit.c lobject.c lstring.c	\
 luac.c lzio.h
 
 gtksudoku_CFLAGS = @GTK_CFLAGS@
-gtksudoku_LDADD = liblua.a @GTK_LIBS@
-gtksudoku_DEPENDENCIES = liblua.a
+gtksudoku_LDADD = $(grid_resource) liblua.a @GTK_LIBS@
+gtksudoku_DEPENDENCIES = $(grid_resource) liblua.a
 
+grid.$(OBJEXT):	grid.rc grid.ico
+	@WINDRES@ --include-dir=$(srcdir) $(srcdir)/grid.rc $@
+
+u2d_SOURCES = u2d.c
 bin2c_SOURCES = bin2c.c
 
 sudoku.h:	bin2c sudoku.lua
@@ -33,8 +43,11 @@ sudokuboardmarshallers.c: sudokuboardmarshallers.txt
 sudokuboardmarshallers.h: sudokuboardmarshallers.txt
 	glib-genmarshal --prefix sudoku_board --header $< > $@
 
+grid.h:	grid.xpm
+	cp $(srcdir)/grid.xpm $@
+
 BUILT_SOURCES = $(nodist_gtksudoku_SOURCES)
 
 CLEANFILES = $(nodist_gtksudoku_SOURCES)
 
-EXTRA_DIST = sudoku.lua sudokuboardmarshallers.txt
+EXTRA_DIST = sudoku.lua sudokuboardmarshallers.txt grid.xpm grid.rc grid.ico

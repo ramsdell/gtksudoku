@@ -19,3 +19,13 @@ Read the introduction in the help menu.
 See INSTALL for complete installation instructions.
 
 GTK Sudoku is a product of the Looney Fun Factory.
+
+--------------------------------------
+
+MinGW/MSYS Build Tips
+
+Install GTK+ DLLs and development files into /local, not / as MSYS
+handles files in /bin specially.
+
+Configure with LDFLAGS=-mwindows, as pkg-config fails to include this
+option in its linker output, unlike fltk-config and wx-config. 

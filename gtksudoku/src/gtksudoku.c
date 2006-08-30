@@ -37,6 +37,7 @@
 #include "showtext.h"
 #include "board.h"
 #include "interp.h"
+#include "grid.h"
 
 /* Size of the buffer used to read a board from a text file. */
 #define NBOARD (DIGITS * DIGITS * DIGITS)
@@ -301,6 +302,10 @@ main(int argc, char *argv[])
   window = gtk_window_new(GTK_WINDOW_TOPLEVEL);
   gtk_window_set_title(GTK_WINDOW(window), PACKAGE_NAME);
   g_signal_connect(window, "destroy", G_CALLBACK(gtk_main_quit), NULL);
+  GdkPixbuf *pixbuf = gdk_pixbuf_new_from_xpm_data((const char **)grid_xpm);
+  GList *list = gtk_window_get_default_icon_list();
+  list = g_list_prepend(list, pixbuf);
+  gtk_window_set_default_icon_list(list);
 
   GtkWidget *box = gtk_vbox_new(FALSE, 0);
   gtk_container_add(GTK_CONTAINER(window), box);
