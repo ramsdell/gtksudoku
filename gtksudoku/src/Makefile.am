@@ -1,6 +1,6 @@
 bin_PROGRAMS = gtksudoku
 noinst_LIBRARIES = liblua.a
-noinst_PROGRAMS = bin2c u2d
+noinst_PROGRAMS = bin2c
 
 if HAVE_WINDRES
   grid_resource = grid.$(OBJEXT)
@@ -31,7 +31,6 @@ gtksudoku_DEPENDENCIES = $(grid_resource) liblua.a
 grid.$(OBJEXT):	grid.rc grid.ico
 	@WINDRES@ --include-dir=$(srcdir) $(srcdir)/grid.rc $@
 
-u2d_SOURCES = u2d.c
 bin2c_SOURCES = bin2c.c
 
 sudoku.h:	bin2c$(EXEEXT) sudoku.lua

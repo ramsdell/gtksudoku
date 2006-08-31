@@ -1,3 +1,9 @@
+2006-08-31  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* CVS: Tagged as gtksudoku-0_1
+
+	* nsis/gtksudoku.nsi.in: Added an NSIS installer script.
+
 2006-08-30  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* src/grid.xpm: Added a default Icon for each window.
@@ -6,4 +12,4 @@
 
 2006-08-25  John D. Ramsdell  <ramsdell@mitre.org>
 
-	*  Tagged 0.0: Initial release
+	* CVS: Tagged as gtksudoku-0_0

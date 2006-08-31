@@ -1,13 +1,33 @@
+;GTK Sudoku Installer Script
+
+; This version checks for the presence of the correct version of GTK+.
+; The code used to perform the check was taken from the NSIS script
+; for Gaim.
+
+;This script was derived from StartMenu.nsi, which starts with:
+
+;NSIS Modern User Interface
+;Start Menu Folder Selection Example Script
+;Written by Joost Verburg
+
+;--------------------------------
 ;GTK Sudoku specifics
 
   !define NAME "@PACKAGE_NAME@"
   !define VERSION "@VERSION@"
   !define PROGRAM "@PACKAGE@"
+  !define URL "@PACKAGE_BUGREPORT@"
+
+  !define GTK_VERSION "2.8.20"
+  !define GTK_REG_KEY "SOFTWARE\GTK\2.0"
 
 ;--------------------------------
 ;Include Modern UI
 
   !include "MUI.nsh"
+
+  !include "WordFunc.nsh"
+  !insertmacro VersionCompare
 
 ;--------------------------------
 ;General
@@ -16,28 +36,51 @@
   Name "${NAME}"
   OutFile "${PROGRAM}-${VERSION}.exe"
 
-  ;Default installation directory
+  ;Default installation folder
   InstallDir "$PROGRAMFILES\${NAME}"
 
   ;Get installation folder from registry if available
-  InstallDirRegKey HKLM "Software\${NAME}" "Install_Dir"
+  InstallDirRegKey HKCU "Software\${NAME}" ""
+
+;--------------------------------
+;Variables
+
+  Var MUI_TEMP
+  Var STARTMENU_FOLDER
+  Var GTK_FOLDER
+
+;--------------------------------
+;Interface Settings
+
+  !define MUI_ABORTWARNING
 
 ;--------------------------------
 ;Pages
 
+  !define MUI_PAGE_CUSTOMFUNCTION_PRE preWelcomePage
   !insertmacro MUI_PAGE_WELCOME
   !insertmacro MUI_PAGE_LICENSE "license.txt"
   !insertmacro MUI_PAGE_COMPONENTS
   !insertmacro MUI_PAGE_DIRECTORY
+
+  ;Start Menu Folder Page Configuration
+  !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCU"
+  !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${NAME}"
+  !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
+  !insertmacro MUI_PAGE_STARTMENU Application $STARTMENU_FOLDER
+
   !insertmacro MUI_PAGE_INSTFILES
+
+  ;Finish Page Configuration
   !define MUI_FINISHPAGE_RUN "$INSTDIR\${PROGRAM}.exe"
-  !define MUI_FINISHPAGE_TEXT "This program depends on a modern version of GTK+ 2.0."
+  !define MUI_FINISHPAGE_RUN_NOTCHECKED
+  !define MUI_FINISHPAGE_TEXT "This program depends on the presence of GTK+ ${GTK_VERSION} or higher."
+  !define MUI_FINISHPAGE_LINK "${NAME} project website"
+  !define MUI_FINISHPAGE_LINK_LOCATION "${URL}"
   !insertmacro MUI_PAGE_FINISH
 
-  !insertmacro MUI_UNPAGE_WELCOME
   !insertmacro MUI_UNPAGE_CONFIRM
   !insertmacro MUI_UNPAGE_INSTFILES
-  !insertmacro MUI_UNPAGE_FINISH
 
 ;--------------------------------
 ;Languages
@@ -49,33 +92,25 @@
 
 Section "${NAME}" SecDummy
 
-  SectionIn RO
-
-  ; Set output path to the installation directory.
   SetOutPath "$INSTDIR"
 
   ; Put file there
   File "${PROGRAM}.exe"
 
-  ; Write the installation path into the registry
-  WriteRegStr HKLM "SOFTWARE\${NAME}" "Install_Dir" "$INSTDIR"
+  ;Store installation folder
+  WriteRegStr HKCU "Software\${NAME}" "" $INSTDIR
 
-  ; Write the uninstall keys for Windows
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "DisplayName" "${NAME}"
-  WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "UninstallString" '"$INSTDIR\uninstall.exe"'
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "NoModify" 1
-  WriteRegDWORD HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}" "NoRepair" 1
-  WriteUninstaller "uninstall.exe"
+  ;Create uninstaller
+  WriteUninstaller "$INSTDIR\Uninstall.exe"
 
-SectionEnd
+  !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
 
-;--------------------------------
-;Optional section (can be disabled by the user)
-Section "Start Menu Shortcuts"
+    ;Create shortcuts
+    CreateDirectory "$SMPROGRAMS\$STARTMENU_FOLDER"
+    CreateShortCut "$SMPROGRAMS\$STARTMENU_FOLDER\Uninstall.lnk" "$INSTDIR\Uninstall.exe"
+    CreateShortCut "$SMPROGRAMS\${NAME}\${NAME}.lnk" "$INSTDIR\${PROGRAM}"
 
-  CreateDirectory "$SMPROGRAMS\${NAME}"
-  CreateShortCut "$SMPROGRAMS\${NAME}\Uninstall.lnk" "$INSTDIR\uninstall.exe" "" "$INSTDIR\uninstall.exe" 0
-  CreateShortCut "$SMPROGRAMS\${NAME}\${NAME}.lnk" "$INSTDIR\${PROGRAM}" "" "$INSTDIR\${PROGRAM}" 0
+  !insertmacro MUI_STARTMENU_WRITE_END
 
 SectionEnd
 
@@ -91,23 +126,187 @@ SectionEnd
   !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 ;--------------------------------
-;Uninstaller
+;Uninstaller Section
 
 Section "Uninstall"
 
-  ; Remove registry keys
-  DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${NAME}"
-  DeleteRegKey HKLM "SOFTWARE\${NAME}"
-
-  ; Remove files and uninstaller
   Delete "$INSTDIR\${PROGRAM}.exe"
-  Delete "$INSTDIR\uninstall.exe"
 
-  ; Remove shortcuts, if any
-  Delete "$SMPROGRAMS\${NAME}\*.*"
+  Delete "$INSTDIR\Uninstall.exe"
 
-  ; Remove directories used
-  RMDir "$SMPROGRAMS\${NAME}"
   RMDir "$INSTDIR"
 
+  !insertmacro MUI_STARTMENU_GETFOLDER Application $MUI_TEMP
+
+  Delete "$SMPROGRAMS\$MUI_TEMP\Uninstall.lnk"
+  Delete "$SMPROGRAMS\$MUI_TEMP\${NAME}.lnk"
+
+  ;Delete empty start menu parent diretories
+  StrCpy $MUI_TEMP "$SMPROGRAMS\$MUI_TEMP"
+
+  startMenuDeleteLoop:
+	ClearErrors
+    RMDir $MUI_TEMP
+    GetFullPathName $MUI_TEMP "$MUI_TEMP\.."
+
+    IfErrors startMenuDeleteLoopDone
+
+    StrCmp $MUI_TEMP $SMPROGRAMS startMenuDeleteLoopDone startMenuDeleteLoop
+  startMenuDeleteLoopDone:
+
+  DeleteRegKey /ifempty HKCU "Software\${NAME}"
+
 SectionEnd
+
+;--------------------------------
+;Functions -- All taken from the GAIM NSIS script
+
+Function CheckUserInstallRights
+  Push $0
+  Push $1
+  ClearErrors
+  UserInfo::GetName
+  IfErrors Win9x
+  Pop $0
+  UserInfo::GetAccountType
+  Pop $1
+
+  StrCmp $1 "Admin" 0 +3
+    StrCpy $1 "HKLM"
+    Goto done
+  StrCmp $1 "Power" 0 +3
+    StrCpy $1 "HKLM"
+    Goto done
+  StrCmp $1 "User" 0 +3
+    StrCpy $1 "HKCU"
+    Goto done
+  StrCmp $1 "Guest" 0 +3
+    StrCpy $1 "NONE"
+    Goto done
+  ; Unknown error
+  StrCpy $1 "NONE"
+  Goto done
+
+  Win9x:
+    StrCpy $1 "HKLM"
+
+  done:
+    Exch $1
+    Exch
+    Pop $0
+FunctionEnd
+
+;
+; Usage:
+; Call DoWeNeedGtk
+; First Pop:
+;   0 - We have the correct version
+;       Second Pop: Key where Version was found
+;   1 - We have an old version that needs to be upgraded
+;       Second Pop: HKLM or HKCU depending on where GTK was found.
+;   2 - We don't have Gtk+ at all
+;       Second Pop: "NONE, HKLM or HKCU" depending on our rights..
+;
+Function DoWeNeedGtk
+  ; Logic should be:
+  ; - Check what user rights we have (HKLM or HKCU)
+  ;   - If HKLM rights..
+  ;     - Only check HKLM key for GTK+
+  ;       - If installed to HKLM, check it and return.
+  ;   - If HKCU rights..
+  ;     - First check HKCU key for GTK+
+  ;       - if good or bad exists stop and ret.
+  ;     - If no hkcu gtk+ install, check HKLM
+  ;       - If HKLM ver exists but old, return as if no ver exits.
+  ;   - If no rights
+  ;     - Check HKLM
+  Push $0
+  Push $2
+  Push $3
+  Push $4
+  Push $5
+
+  Call CheckUserInstallRights
+  Pop $3
+  StrCmp $3 "HKLM" check_hklm
+  StrCmp $3 "HKCU" check_hkcu check_hklm
+    check_hkcu:
+      ReadRegStr $0 HKCU ${GTK_REG_KEY} "Version"
+      StrCpy $5 "HKCU"
+      StrCmp $0 "" check_hklm have_gtk
+
+    check_hklm:
+      ReadRegStr $0 HKLM ${GTK_REG_KEY} "Version"
+      StrCpy $5 "HKLM"
+      StrCmp $0 "" no_gtk have_gtk
+
+  have_gtk:
+    ; GTK+ is already installed.. check version.
+    ${VersionCompare} ${GTK_VERSION} $0 $2
+    StrCmp $2 "1" bad_version good_version
+    bad_version:
+      ; Bad version. If hklm ver and we have hkcu or no rights.. return no gtk
+      StrCmp $3 "NONE" no_gtk  ; if no rights.. can't upgrade
+      StrCmp $3 "HKCU" 0 upgrade_gtk ; if HKLM can upgrade..
+        StrCmp $5 "HKLM" no_gtk upgrade_gtk ; have hkcu rights.. if found hklm ver can't upgrade..
+
+      upgrade_gtk:
+        StrCpy $2 "1"
+        Push $5
+        Push $2
+        Goto done
+
+  good_version:
+    StrCmp $5 "HKLM" have_hklm_gtk have_hkcu_gtk
+      have_hkcu_gtk:
+        ; Have HKCU version
+        ReadRegStr $4 HKCU ${GTK_REG_KEY} "Path"
+        Goto good_version_cont
+
+      have_hklm_gtk:
+        ReadRegStr $4 HKLM ${GTK_REG_KEY} "Path"
+        Goto good_version_cont
+
+    good_version_cont:
+      StrCpy $2 "0"
+      Push $4  ; The path to existing GTK+
+      Push $2
+      Goto done
+
+  no_gtk:
+    StrCpy $2 "2"
+    Push $3 ; our rights
+    Push $2
+    Goto done
+
+  done:
+  ; The top two items on the stack are what we want to return
+  Exch 5
+  Pop $0
+  Exch 5
+  Pop $2
+  Pop $5
+  Pop $4
+  Pop $3
+FunctionEnd
+
+; Page enter and exit functions..
+
+Function preWelcomePage
+  ; If this installer dosn't have GTK, check whether we need it.
+  ; We do this here an not in .onInit because language change in
+  ; .onInit doesn't take effect until it is finished.
+    Push $R0
+    Call DoWeNeedGtk
+    Pop $R0
+    Pop $GTK_FOLDER
+
+    StrCmp $R0 "0" have_gtk need_gtk
+    need_gtk:
+      IfSilent skip_mb
+      MessageBox MB_OK "${NAME} requires GTK+ ${GTK_VERSION} or higher." IDOK
+      skip_mb:
+      Quit
+    have_gtk:
+    Pop $R0
+FunctionEnd

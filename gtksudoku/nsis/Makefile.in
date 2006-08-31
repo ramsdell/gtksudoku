@@ -41,6 +41,4 @@ license.txt:	$(top_srcdir)/COPYING
 	cp $(top_srcdir)/COPYING $@
 	unix2dos $@
 
-#	$(top_builddir)/src/u2d -o $@ $(top_srcdir)/COPYING
-
 .PHONY:	all clean
