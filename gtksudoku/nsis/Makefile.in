@@ -1,0 +1,46 @@
+# Builds the files needed for use with the Nullsoft Scriptable Install
+# System installer builder on MSYS.
+
+SHELL = @SHELL@
+
+TARGETS = @PACKAGE@.exe license.txt
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+top_builddir = ..
+
+all:	$(TARGETS)
+
+clean:
+	-rm $(TARGETS)
+
+@PACKAGE@.exe:	$(top_builddir)/src/@PACKAGE@.exe
+	cp -p $(top_builddir)/src/@PACKAGE@.exe $@
+	strip $@
+
+license.txt:	$(top_srcdir)/COPYING
+	cp $(top_srcdir)/COPYING $@
+	unix2dos $@
+
+#	$(top_builddir)/src/u2d -o $@ $(top_srcdir)/COPYING
+
+.PHONY:	all clean

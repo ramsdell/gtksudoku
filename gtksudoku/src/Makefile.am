@@ -34,7 +34,7 @@ grid.$(OBJEXT):	grid.rc grid.ico
 u2d_SOURCES = u2d.c
 bin2c_SOURCES = bin2c.c
 
-sudoku.h:	bin2c sudoku.lua
+sudoku.h:	bin2c$(EXEEXT) sudoku.lua
 	./bin2c -o $@ -n sudoku.lua $(srcdir)/sudoku.lua
 
 sudokuboardmarshallers.c: sudokuboardmarshallers.txt
@@ -50,4 +50,5 @@ BUILT_SOURCES = $(nodist_gtksudoku_SOURCES)
 
 CLEANFILES = $(nodist_gtksudoku_SOURCES)
 
-EXTRA_DIST = sudoku.lua sudokuboardmarshallers.txt grid.xpm grid.rc grid.ico
+EXTRA_DIST = sudoku.lua sudokuboardmarshallers.txt grid.xpm grid.rc	\
+grid.ico

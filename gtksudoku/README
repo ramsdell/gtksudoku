@@ -27,5 +27,11 @@ MinGW/MSYS Build Tips
 Install GTK+ DLLs and development files into /local, not / as MSYS
 handles files in /bin specially.
 
-Configure with LDFLAGS=-mwindows, as pkg-config fails to include this
-option in its linker output, unlike fltk-config and wx-config. 
+On MSYS, pkg-config fails to include the -mwindows option in its
+linker output, unlike fltk-config and wx-config.  To repair the
+problem, add -mwindows to the Libs: field in the GTK+ 2.0 pkg-config
+configuration file.
+
+/local/lib/pkgconfig/gtk+-2.0.pc:
+--------------------------------------
+Libs: ... -mwindows
