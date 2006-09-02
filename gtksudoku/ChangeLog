@@ -1,3 +1,9 @@
+2006-09-02  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* CVS: Tagged as gtksudoku-0_2
+
+	* COPYING.LUA: Added Lua license.
+
 2006-08-31  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* CVS: Tagged as gtksudoku-0_1

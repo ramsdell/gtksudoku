@@ -204,7 +204,10 @@ help_intro(void)
 }
 
 static const char license[] =
-  "Copyright (C) 2006 John D. Ramsdell"
+  "Copyright (C) 2006 John D. Ramsdell for the non-Lua parts.  "
+  "Copyright (C) 1994-2006 Lua.org, PUC-Rio for the Lua parts." 
+  "\n\n"
+  PACKAGE_NAME " License"
   "\n\n"
   "This program is free software; you can redistribute it and/or "
   "modify it under the terms of the GNU General Public License as "
@@ -219,7 +222,15 @@ static const char license[] =
   "You should have received a copy of the GNU General Public License "
   "along with this program; if not, write to the Free Software "
   "Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA "
-  "02110-1301 USA";
+  "02110-1301 USA"
+  "\n\n"
+  "Lua License"
+  "\n\n"
+  "Lua is licensed under the terms of the MIT license.  "
+  "This means that Lua is free software and can be used for "
+  "both academic and commercial purposes at absolutely no cost."
+  "\n\n"
+  "For details and rationale, see http://www.lua.org/license.html.";
 
 static const char comments[] =
   "A logic puzzle solving aid";
