@@ -27,7 +27,6 @@ AC_PATH_PROG([WINDRES], [windres])
 AM_CONDITIONAL([HAVE_WINDRES], [test -n "$WINDRES"])
 
 AC_CONFIG_FILES([Makefile gtksudoku.spec src/Makefile
-                          debian/changelog
 			  nsis/Makefile nsis/gtksudoku.nsi])
 
 AC_OUTPUT

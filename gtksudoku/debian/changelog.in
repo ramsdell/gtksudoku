@@ -1,6 +1,0 @@
-@PACKAGE@ (@VERSION@-1) unstable; urgency=low
-
-  * @PACKAGE_STRING@ released
-
- -- unknown <ramsdell@mitre.org>  Tue, 29 Aug 2006 14:17:23 -0400
-
