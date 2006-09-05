@@ -1,5 +1,3 @@
-SUBDIRS = src
+SUBDIRS = src debian
 dist_data_DATA = gtksudoku.html
-EXTRA_DIST = COPYING.LUA debian/changelog debian/compat debian/control	\
-debian/copyright debian/dirs debian/docs debian/rules nsis/Makefile.in	\
-nsis/gtksudoku.nsi.in
+EXTRA_DIST = COPYING.LUA nsis/Makefile.in nsis/gtksudoku.nsi.in

@@ -1,3 +1,9 @@
+2006-09-05  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* debian/Makefile.am: Automated Debian packaging procedure.
+
+	* src/gtksudoku.c: Introductory help message expanded.
+
 2006-09-02  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* CVS: Tagged as gtksudoku-0_2

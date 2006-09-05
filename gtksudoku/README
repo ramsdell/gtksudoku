@@ -4,7 +4,10 @@ A Sodoku logic puzzle is solved by filling each cell in a board so
 that every row, column, and 3x3 square contains the digits one through
 nine.  This program eliminates much of the drudgery of solving a
 puzzle and provides educational tips should the path to the solution
-become obscured.
+become obscured.  It is different from most other programs in this
+category, because users specify the rule that justifies each change to
+the Sudoku board.  The program will fail to apply a rule if its
+preconditions are not met, thus detecting silly mistakes early.
 
 This program requires GTK+ 2.0 version 2.8.0 or higher.
 
