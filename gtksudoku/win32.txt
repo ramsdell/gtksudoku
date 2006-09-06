@@ -1,0 +1,37 @@
+Here is how I built an installer that contains its own version of the
+GTK+ runtime on Windows with MSYS.  I uninstalled GTK+, deleted the
+GTK directory in Common Files, and then installed GTK+ 2.8.18.  I
+copied all the files in the GTK\2.0 directory into a staging area.  I
+added my license to the root directory of the staging area, and added
+my application to the bin directory.
+
+Next I created a list of the files in the staging directory with:
+
+$ find . -type f | sed 's-\./--g' | sed 's-/-\\-g' > ../files.txt
+
+and a list of the directories with:
+
+$ find . -type d | sed 's-^\.-$INSTDIR-g' | sed 's-/-\\-g' | sort -r \
+  > ../dirs.txt
+
+To generate the NSIS input required to create directories and files, I
+used:
+
+$ awk '{print "SetOutPath \"" $0 "\""}' dirs.txt
+
+$ awk '{print "File \"/oname=" $0 "\" \"" $0 "\""}' files.txt
+
+To generate the NSIS input required to delete files and directories, I
+used:
+
+$ awk '{print "Delete \"$INSTDIR\\" $0 "\""}' files.txt
+
+$ awk '{print "RMDir \"" $0 "\""}' dirs.txt
+
+A little cutting and pasting finished off the revised installer
+script, and I was able to generate an installer with its own GTK+
+libraries.
+
+Finally, I uninstalled GTK+ 2.8.18, and reinstalled the version used
+by GAIM.  There may be some typo in the above, as I'm capturing the
+procedure after the fact.
