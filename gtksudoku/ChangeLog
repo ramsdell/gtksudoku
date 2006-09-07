@@ -1,3 +1,9 @@
+2006-09-07  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/sudoku.lua (eval): Enabled index command.
+
+	* win32.txt: Added Windows packaging notes.
+
 2006-09-05  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* debian/Makefile.am: Automated Debian packaging procedure.

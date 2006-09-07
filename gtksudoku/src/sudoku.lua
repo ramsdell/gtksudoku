@@ -1385,6 +1385,8 @@ function eval(name, ...)
 	 return do_edit(...)
       elseif name == "help" then
 	 return do_help(...)
+      elseif name == "index" then
+	 return do_help(name, ...)
       else
 	 return "command " .. name .. " unknown"
       end
@@ -1637,15 +1639,17 @@ function cmds.solve.op()
    return e
 end
 
-do				-- Construct the index
-   local index = "Index"
+local function mk_index()	-- Construct the index
    local array = {}
    for name, cmd in pairs(cmds) do
       array[1 + #array] = cmd.help
    end
    table.sort(array)
+   local index = "Index"
    for i,v in ipairs(array) do
       index = index .. "\n\n" .. v
    end
-   topics.index = index
+   return index
 end
+
+topics.index = mk_index()
