@@ -420,15 +420,19 @@ end
 
 function Board:propagate_all_singletons()
    local e = false
-   for r1=1,sides do
-      for r2=1,sides do
-	 for c1=1,sides do
-	    for c2=1,sides do
-	       e = self:propagate_elimination(r1, c1, r2, c2) or e
+   local f = false
+   repeat
+      for r1=1,sides do
+	 for r2=1,sides do
+	    for c1=1,sides do
+	       for c2=1,sides do
+		  f = self:propagate_elimination(r1, c1, r2, c2) or f
+	       end
 	    end
 	 end
       end
-   end
+      e = e or f
+   until not f
    return e
 end
 
@@ -581,7 +585,6 @@ function Board:one_row_in_square(d, row, col)
 	    if self[r1][cc1][r2][c2][d] then
 	       self[r1][cc1][r2][c2][d] = false
 	       e = true
-	       self:propagate_elimination(r1, cc1, r2, c2)
 	    end
 	 end
       end
@@ -611,7 +614,6 @@ function Board:one_column_in_square(d, row, col)
 	    if self[rr1][c1][r2][c2][d] then
 	       self[rr1][c1][r2][c2][d] = false
 	       e = true
-	       self:propagate_elimination(rr1, c1, r2, c2)
 	    end
 	 end
       end
@@ -641,7 +643,6 @@ function Board:one_square_for_row(d, row, col)
 	    if self[r1][c1][rr2][c2][d] then
 	       self[r1][c1][rr2][c2][d] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, rr2, c2)
 	    end
 	 end
       end
@@ -671,7 +672,6 @@ function Board:one_square_for_column(d, row, col)
 	    if self[r1][c1][r2][cc2][d] then
 	       self[r1][c1][r2][cc2][d] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, cc2)
 	    end
 	 end
       end
@@ -809,12 +809,10 @@ function Board:same_pair_in_square(d1, d2, row, col)
 	    if self[r1][c1][r2][c2][d1] then
 	       self[r1][c1][r2][c2][d1] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, c2)
 	    end
 	    if self[r1][c1][r2][c2][d2] then
 	       self[r1][c1][r2][c2][d2] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, c2)
 	    end
 	 end
       end
@@ -845,12 +843,10 @@ function Board:same_pair_in_row(d1, d2, row)
 	    if self[r1][c1][r2][c2][d1] then
 	       self[r1][c1][r2][c2][d1] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, c2)
 	    end
 	    if self[r1][c1][r2][c2][d2] then
 	       self[r1][c1][r2][c2][d2] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, c2)
 	    end
 	 end
       end
@@ -881,12 +877,10 @@ function Board:same_pair_in_column(d1, d2, col)
 	    if self[r1][c1][r2][c2][d1] then
 	       self[r1][c1][r2][c2][d1] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, c2)
 	    end
 	    if self[r1][c1][r2][c2][d2] then
 	       self[r1][c1][r2][c2][d2] = false
 	       e = true
-	       self:propagate_elimination(r1, c1, r2, c2)
 	    end
 	 end
       end
@@ -1328,6 +1322,11 @@ other occurrences of the digits in the row are eliminated.
 spc <digit> <digit> <col> -- same pair in column.
 Two cells contain only the same pair, so
 other occurrences of the digits in the column are eliminated.
+
+When there are two places for pair in square, row, or column, they are
+sometimes called a hidden pair.  When two cells contain only the same
+pair in square, row, or column, they are sometimes called a naked
+pair.
 ]]
 
 pair_help = wrap(pair_help)
