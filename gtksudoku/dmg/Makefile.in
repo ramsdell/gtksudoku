@@ -1,0 +1,53 @@
+# Builds a Mac disk image.
+
+SHELL = @SHELL@
+
+TARGETS = @PACKAGE@ license.txt
+
+srcdir = @srcdir@
+top_srcdir = @top_srcdir@
+VPATH = @srcdir@
+prefix = @prefix@
+exec_prefix = @exec_prefix@
+
+bindir = @bindir@
+sbindir = @sbindir@
+libexecdir = @libexecdir@
+datadir = @datadir@
+sysconfdir = @sysconfdir@
+sharedstatedir = @sharedstatedir@
+localstatedir = @localstatedir@
+libdir = @libdir@
+infodir = @infodir@
+mandir = @mandir@
+includedir = @includedir@
+oldincludedir = /usr/include
+pkgdatadir = $(datadir)/@PACKAGE@
+pkglibdir = $(libdir)/@PACKAGE@
+pkgincludedir = $(includedir)/@PACKAGE@
+top_builddir = ..
+
+all:	@PACKAGE_TARNAME@-@VERSION@.dmg
+
+clean:
+	-rm $(TARGETS) @PACKAGE_TARNAME@-@VERSION@.dmg
+	-rm -rf @PACKAGE@.app
+
+@PACKAGE_TARNAME@-@VERSION@.dmg:	$(TARGETS)
+	-mkdir @PACKAGE@.app
+	-mkdir @PACKAGE@.app/Contents
+	cp -p Info.plist @PACKAGE@.app/Contents
+	-mkdir @PACKAGE@.app/Contents/MacOS
+	cp -p @PACKAGE@ @PACKAGE@.app/Contents/MacOS/@PACKAGE@
+	-mkdir @PACKAGE@.app/Contents/Resources
+	cp -p $(srcdir)/@PACKAGE@.png @PACKAGE@.app/Contents/Resources/@PACKAGE@.png
+	cp -p license.txt @PACKAGE@.app/Contents/Resources/license.txt
+	hdiutil create -srcfolder @PACKAGE@.app $@
+
+@PACKAGE@:	$(top_builddir)/src/@PACKAGE@
+	cp -p $(top_builddir)/src/@PACKAGE@ $@
+
+license.txt:	$(top_srcdir)/COPYING
+	cp -p $(top_srcdir)/COPYING $@
+
+.PHONY:	all clean

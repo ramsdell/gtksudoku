@@ -1354,6 +1354,7 @@ impatient_help = wrap(impatient_help)
 topics.impatient = impatient_help
 
 local function do_help(topic)
+   local s
    if topic then
       s = topics[topic]
       if not s then
