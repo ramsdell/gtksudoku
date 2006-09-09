@@ -50,4 +50,4 @@ BUILT_SOURCES = $(nodist_gtksudoku_SOURCES)
 CLEANFILES = $(nodist_gtksudoku_SOURCES)
 
 EXTRA_DIST = sudoku.lua sudokuboardmarshallers.txt grid.xpm grid.rc	\
-grid.ico
+grid.ico lualint.sh

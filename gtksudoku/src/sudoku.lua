@@ -1196,7 +1196,8 @@ This command alone can be used to solve most easy Sudoku puzzles.  The
 other basic rules are: one place for digit in row (r), one place place
 for digit in column (c), and digit is the only one possible in cell
 (d).  These are the workhorse commands.  The command "help basic"
-describes them.
+describes them.  The commands "help advanced" and "help pair" describe
+commands used for difficult puzzles.
 
 Other useful commands:
 
@@ -1208,7 +1209,7 @@ details -- show detailed cell view.
 
 normal -- show normal cell view.
 
-Other help topics: board, history, advanced, pair, and impatient.  Be
+Other help topics: board, history, and impatient.  Be
 sure to read the introduction in the help menu.
 ]]
 
@@ -1450,7 +1451,7 @@ cmds.next.op = next
 cmds.details = {}
 cmds.details.nargs = 0
 cmds.details.help = "details -- show detailed cell view"
-topics.details = intro
+topics.details = intro_help
 function cmds.details.op()
    details = true
    return false, "detailed view enabled"
@@ -1459,7 +1460,7 @@ end
 cmds.normal = {}
 cmds.normal.nargs = 0
 cmds.normal.help = "normal -- show normal cell view"
-topics.normal = intro
+topics.normal = intro_help
 function cmds.normal.op()
    details = false
    return false, "detailed view disabled"

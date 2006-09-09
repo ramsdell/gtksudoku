@@ -1,3 +1,11 @@
+2006-09-09  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/sudoku.lua: Enabled "help details" and "help normal".  Other
+	help message text was expanded.
+
+	* src/lualint.sh: Added Jay Carlson's script for checking global
+	variable usage.
+
 2006-09-08  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* src/sudoku.lua (Advanced and pair strategies): Removed calls to
