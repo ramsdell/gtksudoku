@@ -1,3 +1,26 @@
-2006-08-31:	GTK Sudoku 0.1 released with its own window icon.
+GTK Sudoku NEWS -- history of user-visible changes.
 
-2006-08-25:	Initial GTK Sudoku version released.
+* Changes in 0.3
+
+** Advanced strategies and some pair strategies used to determine cells
+that had only one possible value (singletons) as a result of applying
+the strategy.  In this version, these strategies only perform one
+step, and users must identify cells determined by these strategies.
+
+** The propagate all singletons (p) command now ensures no singletons
+are left after it is applied.
+
+** The "help details", "help normal", and "index" commands now work as
+expected.  In previous versions, the commands were not recognized.
+
+** The text that makes up various help messages have been expanded.
+
+* Changes in 0.2
+
+** Lua License was added to the license text in the help about dialog.
+
+* Changes in 0.1
+
+** Each window has an icon that shows part of a Sudoku board.
+
+Local variables: mode: outline end:

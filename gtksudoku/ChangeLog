@@ -1,3 +1,7 @@
+2006-09-10  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* CVS: Tagged as gtksudoku-0_3
+
 2006-09-09  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* src/sudoku.lua: Enabled "help details" and "help normal".  Other
@@ -8,7 +12,7 @@
 
 2006-09-08  John D. Ramsdell  <ramsdell@mitre.org>
 
-	* src/sudoku.lua (Advanced and pair strategies): Removed calls to
+	* src/sudoku.lua (advanced and pair strategies): Removed calls to
 	propagate_elimination, as each of these strategies is supposed to
 	implement just one step.  See "help impatient" for the multi-step
 	strategies.
