@@ -420,8 +420,8 @@ end
 
 function Board:propagate_all_singletons()
    local e = false
-   local f = false
    repeat
+      local f = false
       for r1=1,sides do
 	 for r2=1,sides do
 	    for c1=1,sides do
@@ -431,9 +431,12 @@ function Board:propagate_all_singletons()
 	    end
 	 end
       end
-      e = e or f
-   until not f
-   return e
+      if f then
+	 e = true
+      else
+	 return e
+      end
+   until false
 end
 
 -- The location of digit d is determined if there is only one place it
