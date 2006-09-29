@@ -25,7 +25,7 @@ loadlib.c lstate.h lua.c lzio.c ldebug.c linit.c lobject.c lstring.c	\
 luac.c lzio.h
 
 gtksudoku_CFLAGS = @GTK_CFLAGS@
-gtksudoku_LDADD = $(grid_resource) liblua.a @GTK_LIBS@
+gtksudoku_LDADD = $(grid_resource) liblua.a @GTK_LIBS@ -lm
 gtksudoku_DEPENDENCIES = $(grid_resource) liblua.a
 
 grid.$(OBJEXT):	grid.rc grid.ico

@@ -18,9 +18,6 @@ fi
 
 AC_PROG_RANLIB
 
-AC_CHECK_LIB([m], [pow],,
-	     [AC_MSG_ERROR([Cannot find the math library])])
-
 # windres
 
 AC_ARG_VAR([WINDRES], [Path to the windres when available])
