@@ -1,4 +1,4 @@
-AC_INIT(GTK Sudoku, 0.3, http://luaforge.net/projects/gtksudoku/, gtksudoku)
+AC_INIT(GTK Sudoku, 0.4, http://luaforge.net/projects/gtksudoku/, gtksudoku)
 
 AC_CONFIG_SRCDIR(src/gtksudoku.c)
 
