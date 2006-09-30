@@ -96,7 +96,7 @@ function Cell:first()
 	 return i
       end
    end
-   error("Board inconsistent")
+   error("Board inconsistent", 0)
 end
 
 function Cell:only_pair_present(d1, d2)
@@ -378,7 +378,7 @@ local function board(s)
    local t = strip_string(s)
    if t:len() ~= digits2 then
       local msg = "bad input: expected " .. digits2 .. " items but found "
-      error(msg .. t:len() .. " in \n" .. s)
+      error(msg .. t:len() .. " in \n" .. s, 0)
    end
    local b = mk_board()
    local i = 0
@@ -404,7 +404,7 @@ end
 
 local function spread(index)
    if index < 1 or index > digits then
-      error("Bad index number " .. index)
+      error("Bad index number " .. index, 0)
    else
       local i1 = math.ceil(index / sides)
       local i2 = (index - 1) % sides + 1
@@ -1104,7 +1104,7 @@ function save()
    if it then
       return it:show()
    else
-      error("nothing to save")
+      error("nothing to save", 0)
    end
 end
 
@@ -1407,7 +1407,11 @@ function eval(name, ...)
       print_blank_board()
       return "no board"
    end
-   local e, msg = cmd.op(...)
+   local status, e, msg = pcall(cmd.op,...)
+   if not status then
+      msg = e
+      e = false
+   end
    it:print_all()
    if e then
       push()

@@ -1,3 +1,12 @@
+2006-09-30  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* CVS: Tagged as gtksudoku-0_4
+
+	* src/sudoku.lua (eval): Rapped pcall around the command called in
+	the eval function so that the board gets printed when the board is
+	inconsistent.  Thrown error message no longer include the file
+	name and the line number for the error message.
+
 2006-09-10  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* CVS: Tagged as gtksudoku-0_3
