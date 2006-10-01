@@ -42,6 +42,9 @@
   ;Get installation folder from registry if available
   InstallDirRegKey HKCU "Software\${NAME}" ""
 
+  ; Installer data is compressed in one block
+  SetCompressor /SOLID lzma
+
 ;--------------------------------
 ;Variables
 
