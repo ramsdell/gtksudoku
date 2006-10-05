@@ -1,5 +1,11 @@
 GTK Sudoku NEWS -- history of user-visible changes.
 
+* Changes in 0.4
+
+** This version corrects a printing bug exercised when an inconsistent
+board is created.  Inconsistent boards occur when one uses trial and
+error to solve a puzzle.
+
 * Changes in 0.3
 
 ** Advanced strategies and some pair strategies used to determine cells
