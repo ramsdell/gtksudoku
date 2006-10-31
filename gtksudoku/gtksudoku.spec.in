@@ -12,7 +12,7 @@ Summary:	A Sudoku Game
 License:	GPL
 Group:		Amusements/Games
 
-Requires:	gtk+2.0 >= 2.8.0
+Requires:	gtk2 >= 2.8.0
 
 %description
 

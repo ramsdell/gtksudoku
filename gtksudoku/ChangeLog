@@ -1,3 +1,8 @@
+2006-10-30  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* gtksudoku.spec.in: (Requires): Corrected the package name to
+	gtk2.
+
 2006-09-30  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* CVS: Tagged as gtksudoku-0_4
