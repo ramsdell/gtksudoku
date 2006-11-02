@@ -29,4 +29,6 @@ expected.  In previous versions, the commands were not recognized.
 
 ** Each window has an icon that shows part of a Sudoku board.
 
-Local variables: mode: outline end:
+Local variables: 
+mode: outline 
+End:
