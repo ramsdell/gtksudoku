@@ -1425,7 +1425,7 @@ function eval(name, ...)
    if e then
       msg = msg or "yes"
    else
-      table.remove(history)
+      pop()
       msg = msg or "no"
    end
    return msg
