@@ -1,5 +1,9 @@
 GTK Sudoku NEWS -- history of user-visible changes.
 
+* Changes in 0.5
+
+** New command: new pushes the current board and then creates a blank one.
+
 * Changes in 0.4
 
 ** This version corrects a printing bug exercised when an inconsistent

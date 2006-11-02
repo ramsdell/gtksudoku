@@ -1062,7 +1062,9 @@ local history = {}		-- The history of boards
 local focus = 0			-- Index of the current board
 
 local function push()
-   table.insert(history, it:clone())
+   if it then
+      table.insert(history, it:clone())
+   end
    focus = #history
 end
 
@@ -1090,13 +1092,17 @@ local function next()
    it = history[focus]
 end
 
+local function new()
+   push()
+   it = mk_board()
+end
+
 -- Load a puzzle from a string.
 
 function load(s)
    it = board(s)
    history = {}
    focus = 0
-   push()
    return it:print_all()
 end
 
@@ -1117,8 +1123,8 @@ local function do_edit()
    end
    s = edit(s)
    if s then
-      it = board(s)
       push()
+      it = board(s)
       return it:print_all()
    else
       return "edit canceled"
@@ -1251,6 +1257,8 @@ top -- get top board from history.
 back -- go back in the history.
 
 next -- go forward in the history.
+
+new -- push then make a blank board.
 ]]
 
 history_help = wrap(history_help)
@@ -1407,6 +1415,7 @@ function eval(name, ...)
       print_blank_board()
       return "no board"
    end
+   push()
    local status, e, msg = pcall(cmd.op,...)
    if not status then
       msg = e
@@ -1414,9 +1423,9 @@ function eval(name, ...)
    end
    it:print_all()
    if e then
-      push()
       msg = msg or "yes"
    else
+      table.remove(history)
       msg = msg or "no"
    end
    return msg
@@ -1453,6 +1462,12 @@ cmds.next.nargs = 0
 cmds.next.help = "next -- go forward in the history"
 topics.next = history_help
 cmds.next.op = next
+
+cmds.new = {}
+cmds.new.nargs = 0
+cmds.new.help = "new -- push then make a blank board"
+topics.new = history_help
+cmds.new.op = new
 
 -- Cell details
 

@@ -1,3 +1,16 @@
+2006-11-02  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* CVS: Tagged as gtksudoku-0_5
+
+	* src/sudoku.lua (eval): A board is pushed onto the history before
+	a command is run, and is removed from the history if the command
+	fails.
+
+	* src/sudoku.lua (push): Added check for nil board.
+
+	* src/sudoku.lua (new): Added new command.  It pushes the current
+	board and then creates a blank one.
+
 2006-10-30  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* gtksudoku.spec.in: (Requires): Corrected the package name to
