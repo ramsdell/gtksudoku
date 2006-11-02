@@ -1,0 +1,10 @@
+On Fedora, build the package with:
+
+./configure
+rpmbuild -ba gtksudoku.spec
+
+On Debian
+
+./configure
+fakeroot
+dpkg-buildpackage
