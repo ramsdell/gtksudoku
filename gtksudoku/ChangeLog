@@ -2,14 +2,25 @@
 
 	* CVS: Tagged as gtksudoku-0_5
 
+	* src/sudoku.lua (eval): Added better error messages for
+	ill-formed command.
+
 	* src/sudoku.lua (eval): A board is pushed onto the history before
-	a command is run, and is removed from the history if the command
-	fails.
+	a command is run.
 
-	* src/sudoku.lua (push): Added check for nil board.
+	* src/sudoku.lua (push): A board is only pushed if it is not the
+	same as the one most recently saved in the history.
 
-	* src/sudoku.lua (new): Added new command.  It pushes the current
-	board and then creates a blank one.
+	* src/sudoku.lua (back): The pop command was renamed to back.
+
+	* src/sudoku.lua (swap): Added new command.  It swaps the current
+	board with the one most recently saved.
+
+	* src/sudoku.lua (new): Added new command.  It creates a blank
+	board.
+
+	* src/sudoku.lua (eval): Purged history commands other than back,
+	swap, and new.
 
 2006-10-30  John D. Ramsdell  <ramsdell@mitre.org>
 

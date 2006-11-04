@@ -67,6 +67,21 @@ function Cell:clone()
    return obj
 end
 
+function Cell:same(other)
+   if not other then
+      return false
+   end
+   if self.determined ~= other.determined then
+      return false
+   end
+   for i=1,#self do
+      if self[i] ~= other[i] then
+         return false
+      end
+   end
+   return true
+end
+
 -- Returns true when a some possible cell values have been eliminated.
 
 function Cell:singleton(d)
@@ -179,6 +194,24 @@ function Board:clone()
       end
    end
    return obj
+end
+
+function Board:same(other)
+   if not other then
+      return false
+   end
+   for r1=1,sides do
+      for c1=1,sides do
+	 for r2=1,sides do
+	    for c2=1,sides do
+	       if not self[r1][c1][r2][c2]:same(other[r1][c1][r2][c2]) then
+		  return false
+	       end
+	    end
+	 end
+      end
+   end
+   return true
 end
 
 function Board:__tostring()
@@ -1059,42 +1092,50 @@ end
 
 local it			-- The current board
 local history = {}		-- The history of boards
-local focus = 0			-- Index of the current board
 
+-- Push a board on the history only if it is not the same
+-- as the one most recently pushed.
 local function push()
-   if it then
+   if it and not it:same(history[#history]) then
       table.insert(history, it:clone())
+      return true
    end
-   focus = #history
 end
 
-local function pop()
-   it = table.remove(history)
-   focus = #history
-end
-
-local function top()
-   focus = #history
-   it = history[focus]
-end
-
+-- pop a board from the history.  If that board is the same
+-- the current one, pop another.
 local function back()
-   if focus > 1 then
-      focus = focus - 1
+   local top = table.remove(history)
+   if not top then
+      return
    end
-   it = history[focus]
+   if not top:same(it) then
+      it = top
+      return true
+   end
+   top = table.remove(history)
+   if top then
+      it = top
+      return true
+   end
 end
 
-local function next()
-   if focus < #history then
-      focus = focus + 1
-   end
-   it = history[focus]
+-- Swap the top of the stack with the current focus of attention.
+local function swap()
+   local penultimate = it
+   back()
+   local ultimate = it
+   it = penultimate
+   push()
+   it = ultimate
+   return true
 end
 
+-- Make a new board.
 local function new()
    push()
    it = mk_board()
+   return true
 end
 
 -- Load a puzzle from a string.
@@ -1102,7 +1143,6 @@ end
 function load(s)
    it = board(s)
    history = {}
-   focus = 0
    return it:print_all()
 end
 
@@ -1248,17 +1288,11 @@ topics.board = board_help
 local history_help = [[
 History commands
 
-push -- push current board onto history.
+back -- replace the current board with the one most recently saved.
 
-pop -- pop top board from history.
+swap -- swap the current board with the one most recently saved.
 
-top -- get top board from history.
-
-back -- go back in the history.
-
-next -- go forward in the history.
-
-new -- push then make a blank board.
+new -- make a blank board.
 ]]
 
 history_help = wrap(history_help)
@@ -1411,21 +1445,26 @@ function eval(name, ...)
    if nargs ~= cmd.nargs then
       return cmd.help
    end
+   for i=1,nargs do
+      local arg = select(i, ...)
+      if type(arg) ~= "number" or arg < 1 or arg > 9 then
+         return cmd.help
+      end
+   end
    if not it then
       print_blank_board()
       return "no board"
    end
    push()
    local status, e, msg = pcall(cmd.op,...)
+   it:print_all()
    if not status then
       msg = e
       e = false
    end
-   it:print_all()
    if e then
       msg = msg or "yes"
    else
-      pop()
       msg = msg or "no"
    end
    return msg
@@ -1433,39 +1472,21 @@ end
 
 -- History commands
 
-cmds.push = {}
-cmds.push.nargs = 0
-cmds.push.help = "push -- push current board onto history"
-topics.push = history_help
-cmds.push.op = push
-
-cmds.pop = {}
-cmds.pop.nargs = 0
-cmds.pop.help = "pop -- pop top board from history"
-topics.pop = history_help
-cmds.pop.op = pop
-
-cmds.top = {}
-cmds.top.nargs = 0
-cmds.top.help = "top -- get top board from history"
-topics.top = history_help
-cmds.top.op = top
-
 cmds.back = {}
 cmds.back.nargs = 0
-cmds.back.help = "back -- go back in the history"
+cmds.back.help = "back -- replace the current board with the one most recently saved"
 topics.back = history_help
 cmds.back.op = back
 
-cmds.next = {}
-cmds.next.nargs = 0
-cmds.next.help = "next -- go forward in the history"
-topics.next = history_help
-cmds.next.op = next
+cmds.swap = {}
+cmds.swap.nargs = 0
+cmds.swap.help = "swap -- swap the current board with the one most recently saved"
+topics.swap = history_help
+cmds.swap.op = swap
 
 cmds.new = {}
 cmds.new.nargs = 0
-cmds.new.help = "new -- push then make a blank board"
+cmds.new.help = "new -- make a blank board"
 topics.new = history_help
 cmds.new.op = new
 

@@ -2,7 +2,16 @@ GTK Sudoku NEWS -- history of user-visible changes.
 
 * Changes in 0.5
 
-** New command: new pushes the current board and then creates a blank one.
+** History mechanism was revamped.
+
+*** Pop command was renamed to back.
+
+*** New command: new, which creates a blank board.
+
+*** New command: swap, which swaps the current board with the one most
+recently saved.
+
+*** All other history commands have been purged.
 
 * Changes in 0.4
 
