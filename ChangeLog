@@ -1,3 +1,7 @@
+2012-06-23  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src: Updated Lua to version 5.1.5.
+
 2006-11-02  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* CVS: Tagged as gtksudoku-0_5
