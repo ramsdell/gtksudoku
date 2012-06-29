@@ -1,4 +1,4 @@
-AC_INIT(GTK Sudoku, 0.5, http://luaforge.net/projects/gtksudoku/, gtksudoku)
+AC_INIT(GTK Sudoku, 0.6, https://github.com/ramsdell/gtksudoku, gtksudoku)
 
 AC_CONFIG_SRCDIR(src/gtksudoku.c)
 
@@ -7,6 +7,7 @@ AM_INIT_AUTOMAKE
 AM_CONFIG_HEADER(src/config.h)
 
 AC_PROG_CC
+AM_PROG_CC_C_O
 AC_STDC_HEADERS
 
 # Add warning when using GCC
