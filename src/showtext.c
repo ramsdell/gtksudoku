@@ -30,7 +30,7 @@
 void
 show_text(GtkWidget *window, const char *text)
 {
-  GtkWidget *dialog, *view, *sw;
+  GtkWidget *dialog, *content_area, *view, *sw;
   GtkDialogFlags flags = GTK_DIALOG_MODAL | GTK_DIALOG_DESTROY_WITH_PARENT;
   dialog = gtk_dialog_new_with_buttons(PACKAGE_NAME " Help",
 				       GTK_WINDOW(window),
@@ -38,6 +38,7 @@ show_text(GtkWidget *window, const char *text)
 				       GTK_STOCK_CLOSE,
 				       GTK_RESPONSE_CANCEL,
 				       NULL);
+  content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
   gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
   gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
@@ -47,7 +48,7 @@ show_text(GtkWidget *window, const char *text)
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 				 GTK_POLICY_NEVER,
 				 GTK_POLICY_AUTOMATIC);
-  gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox), sw, TRUE, TRUE, 0);
+  gtk_container_add(GTK_CONTAINER(content_area), sw);
 
   view = gtk_text_view_new();
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
@@ -64,7 +65,7 @@ show_text(GtkWidget *window, const char *text)
   PangoContext *context = gtk_widget_get_pango_context(view);
   PangoFontMetrics *metrics;
   metrics = pango_context_get_metrics(context,
-				      view->style->font_desc,
+				      gtk_widget_get_style(view)->font_desc,
 				      pango_context_get_language(context));
   gint char_width = pango_font_metrics_get_approximate_char_width(metrics);
   gint ascent = pango_font_metrics_get_ascent(metrics);

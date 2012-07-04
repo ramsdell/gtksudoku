@@ -367,8 +367,7 @@ main(int argc, char *argv[])
   gtk_box_pack_start(GTK_BOX(box), cell, TRUE, TRUE, 0);
 
   GtkWidget *widget = gtk_entry_new();
-  GTK_WIDGET_UNSET_FLAGS(widget, GTK_CAN_FOCUS);
-  //  gtk_widget_set_can_focus(widget, FALSE);
+  gtk_widget_set_can_focus(widget, FALSE);
   gtk_editable_set_editable(GTK_EDITABLE(widget), FALSE);
   status = GTK_ENTRY(widget);
   gtk_box_pack_start(GTK_BOX(box), widget, FALSE, FALSE, 0);

@@ -103,7 +103,8 @@ sudoku_cell_init(SudokuCell *cell)
   priv->mode = 0;
   GtkWidget *widget = GTK_WIDGET(cell);	/* Set background */
   gtk_widget_ensure_style(widget); /* color to white */
-  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &widget->style->white);
+  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, 
+		       &gtk_widget_get_style(widget)->white);
 }
 
 /* Use the font metrics of the default font to determine the size of a
@@ -115,7 +116,8 @@ sudoku_cell_size_request(GtkWidget *widget,
 {
   gtk_widget_ensure_style(widget);
   PangoLayout *layout = gtk_widget_create_pango_layout(widget, "0");
-  pango_layout_set_font_description(layout, widget->style->font_desc);
+  pango_layout_set_font_description(layout, 
+				    gtk_widget_get_style(widget)->font_desc);
   int width, height;
   pango_layout_get_pixel_size(layout, &width, &height);
   g_object_unref(layout);
@@ -126,12 +128,13 @@ static void
 sudoku_cell_redraw_canvas(SudokuCell *cell)
 {
   GtkWidget *widget = GTK_WIDGET(cell);
-  if (!widget->window) return;
+  if (!gtk_widget_get_window(widget)) return;
 
-  GdkRegion *region = gdk_drawable_get_clip_region(widget->window);
+  GdkRegion *region = 
+    gdk_drawable_get_clip_region(gtk_widget_get_window(widget));
   /* redraw the cairo canvas completely by exposing it */
-  gdk_window_invalidate_region(widget->window, region, TRUE);
-  gdk_window_process_updates(widget->window, TRUE);
+  gdk_window_invalidate_region(gtk_widget_get_window(widget), region, TRUE);
+  gdk_window_process_updates(gtk_widget_get_window(widget), TRUE);
 
   gdk_region_destroy(region);
 }
@@ -170,7 +173,8 @@ sudoku_cell_focus_in(GtkWidget *widget, GdkEventFocus *event)
 static gboolean
 sudoku_cell_focus_out(GtkWidget *widget, GdkEventFocus *event)
 {
-  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, &widget->style->white);
+  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, 
+		       &gtk_widget_get_style(widget)->white);
   sudoku_cell_redraw_canvas(SUDOKU_CELL(widget));
   return FALSE;
 }
@@ -291,8 +295,10 @@ draw_square(GtkWidget *widget, cairo_t *cr)
   SudokuCellPrivate *priv = SUDOKU_CELL_GET_PRIVATE(widget);
   int row = priv->row % SIDES;
   int col = priv->col % SIDES;
-  double cell_w = widget->allocation.width;
-  double cell_h = widget->allocation.height;
+  GtkAllocation alloc;
+  gtk_widget_get_allocation(widget, &alloc);
+  double cell_w = alloc.width;
+  double cell_h = alloc.height;
   double line_w = cairo_get_line_width(cr);
   cairo_set_line_width(cr, INSIDE * line_w);
   switch (row) {
@@ -377,8 +383,10 @@ draw(GtkWidget *widget, cairo_t *cr)
 {
   int d;
   SudokuCellPrivate *priv = SUDOKU_CELL_GET_PRIVATE(widget);
-  double cell_w = widget->allocation.width;
-  double cell_h = widget->allocation.height;
+  GtkAllocation alloc;
+  gtk_widget_get_allocation(widget, &alloc);
+  double cell_w = alloc.width;
+  double cell_h = alloc.height;
   double x = cell_w / 2;
   double y = cell_h / 2;
   double line_w = cairo_get_line_width(cr);
@@ -473,7 +481,7 @@ draw(GtkWidget *widget, cairo_t *cr)
 static gboolean
 sudoku_cell_expose(GtkWidget *widget, GdkEventExpose *event)
 {
-  cairo_t *cr = gdk_cairo_create(widget->window);
+  cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(widget));
   cairo_rectangle(cr, event->area.x, event->area.y,
 		  event->area.width, event->area.height);
   cairo_clip(cr);
@@ -496,7 +504,7 @@ sudoku_cell_new(int row, int col, gboolean editable)
 			  GDK_BUTTON_PRESS_MASK |
 			  GDK_ENTER_NOTIFY_MASK |
 			  GDK_LEAVE_NOTIFY_MASK);
-    GTK_WIDGET_SET_FLAGS(GTK_WIDGET(cell), GTK_CAN_FOCUS);
+    gtk_widget_set_can_focus(GTK_WIDGET(cell), TRUE);
   }
   return GTK_WIDGET(cell);
 }
