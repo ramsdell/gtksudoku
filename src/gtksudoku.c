@@ -28,10 +28,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <gtk/gtk.h>
 #include <glib/gstdio.h>
 #include "config.h"
 #include "gtksudoku.h"
-#include <gtk/gtk.h>
 #include "sudokuboard.h"
 #include "sudokuedit.h"
 #include "showtext.h"
@@ -368,6 +368,7 @@ main(int argc, char *argv[])
 
   GtkWidget *widget = gtk_entry_new();
   GTK_WIDGET_UNSET_FLAGS(widget, GTK_CAN_FOCUS);
+  //  gtk_widget_set_can_focus(widget, FALSE);
   gtk_editable_set_editable(GTK_EDITABLE(widget), FALSE);
   status = GTK_ENTRY(widget);
   gtk_box_pack_start(GTK_BOX(box), widget, FALSE, FALSE, 0);

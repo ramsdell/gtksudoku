@@ -38,10 +38,10 @@
  */
 
 #include <math.h>
-#include "config.h"
-#include "gtksudoku.h"
 #include <gtk/gtk.h>
 #include <gdk/gdkkeysyms.h>
+#include "config.h"
+#include "gtksudoku.h"
 #include "sudokuboard.h"
 #include "sudokucell.h"
 
@@ -210,26 +210,26 @@ sudoku_cell_key_press(GtkWidget *widget, GdkEventKey *event)
   SudokuCellPrivate *priv = SUDOKU_CELL_GET_PRIVATE(widget);
   if (priv->editable) {
     switch (event->keyval) {
-    case GDK_1:
+    case GDK_KEY_1:
       return pressed_key(widget, priv, 1);
-    case GDK_2:
+    case GDK_KEY_2:
       return pressed_key(widget, priv, 2);
-    case GDK_3:
+    case GDK_KEY_3:
       return pressed_key(widget, priv, 3);
-    case GDK_4:
+    case GDK_KEY_4:
       return pressed_key(widget, priv, 4);
-    case GDK_5:
+    case GDK_KEY_5:
       return pressed_key(widget, priv, 5);
-    case GDK_6:
+    case GDK_KEY_6:
       return pressed_key(widget, priv, 6);
-    case GDK_7:
+    case GDK_KEY_7:
       return pressed_key(widget, priv, 7);
-    case GDK_8:
+    case GDK_KEY_8:
       return pressed_key(widget, priv, 8);
-    case GDK_9:
+    case GDK_KEY_9:
       return pressed_key(widget, priv, 9);
-    case GDK_period:
-    case GDK_space:
+    case GDK_KEY_period:
+    case GDK_KEY_space:
       return pressed_key(widget, priv, 0);
     }
   }

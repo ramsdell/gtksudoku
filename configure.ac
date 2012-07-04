@@ -1,4 +1,4 @@
-AC_INIT(GTK Sudoku, 0.6, https://github.com/ramsdell/gtksudoku, gtksudoku)
+AC_INIT(GTK Sudoku, 0.7, https://github.com/ramsdell/gtksudoku, gtksudoku)
 
 AC_CONFIG_SRCDIR(src/gtksudoku.c)
 
@@ -25,7 +25,7 @@ AC_ARG_VAR([WINDRES], [Path to the windres when available])
 AC_PATH_PROG([WINDRES], [windres])
 AM_CONDITIONAL([HAVE_WINDRES], [test -n "$WINDRES"])
 
-AM_PATH_GTK_2_0(2.8.0,, [AC_MSG_ERROR([Cannot find GTK+])])
+AM_PATH_GTK_2_0(2.24.0,, [AC_MSG_ERROR([Cannot find GTK+])])
 
 AC_CONFIG_FILES([Makefile gtksudoku.spec src/Makefile
 			  debian/Makefile debian/changelog.Debian

@@ -19,9 +19,9 @@
  * 02110-1301 USA
  */
 
+#include <gtk/gtk.h>
 #include "config.h"
 #include "gtksudoku.h"
-#include <gtk/gtk.h>
 #include "showtext.h"
 
 /* A dialog window based on the one that displays a license in the

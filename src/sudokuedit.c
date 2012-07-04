@@ -21,9 +21,9 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <gtk/gtk.h>
 #include "config.h"
 #include "gtksudoku.h"
-#include <gtk/gtk.h>
 #include "board.h"
 #include "sudokuboard.h"
 
@@ -76,6 +76,7 @@ sudoku_edit_dialog(GtkWidget *window, const char *board)
 						  GTK_STOCK_CANCEL,
 						  GTK_RESPONSE_CANCEL,
 						  NULL);
+  //   GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
   GtkWidget *widget = sudoku_board_new(TRUE);
 #if defined DEMO_BOARD_CHANGED_SIGNAL
   g_signal_connect(widget, SUDOKU_BOARD_CHANGED_SIGNAL_NAME,
@@ -83,6 +84,7 @@ sudoku_edit_dialog(GtkWidget *window, const char *board)
 #endif
   SudokuBoard *grid = SUDOKU_BOARD(widget);
   sudoku_dialog_set(grid, board);
+  //  gtk_container_add (GTK_CONTAINER(content_area), widget);
   gtk_box_pack_start(GTK_BOX(GTK_DIALOG(dialog)->vbox),
   		     widget, TRUE, TRUE, 0);
   gtk_widget_show_all(widget);

@@ -31,9 +31,9 @@
  * widget.
  */
 
+#include <gtk/gtk.h>
 #include "config.h"
 #include "gtksudoku.h"
-#include <gtk/gtk.h>
 #include "sudokuboardmarshallers.h"
 #include "sudokucell.h"
 #include "sudokuboard.h"
