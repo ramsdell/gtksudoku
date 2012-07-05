@@ -271,10 +271,10 @@ static void
 help_about(void)
 {
   GtkWidget *dialog = gtk_about_dialog_new();
-  gtk_about_dialog_set_name(GTK_ABOUT_DIALOG(dialog), PACKAGE_NAME);
+  gtk_about_dialog_set_program_name(GTK_ABOUT_DIALOG(dialog), PACKAGE_NAME);
   gtk_about_dialog_set_version(GTK_ABOUT_DIALOG(dialog), PACKAGE_VERSION);
   gtk_about_dialog_set_copyright(GTK_ABOUT_DIALOG(dialog),
-				 "Copyright (C) John D. Ramsdell");
+				 "Copyright (C) 2012 John D. Ramsdell");
   gtk_about_dialog_set_comments(GTK_ABOUT_DIALOG(dialog), comments);
   gtk_about_dialog_set_wrap_license(GTK_ABOUT_DIALOG(dialog), TRUE);
   gtk_about_dialog_set_license(GTK_ABOUT_DIALOG(dialog), license);

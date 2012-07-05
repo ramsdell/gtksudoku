@@ -39,7 +39,6 @@ show_text(GtkWidget *window, const char *text)
 				       GTK_RESPONSE_CANCEL,
 				       NULL);
   content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
-  gtk_dialog_set_has_separator(GTK_DIALOG(dialog), FALSE);
   gtk_dialog_set_default_response(GTK_DIALOG(dialog), GTK_RESPONSE_CANCEL);
 
   sw = gtk_scrolled_window_new(NULL, NULL);
