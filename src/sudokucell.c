@@ -52,10 +52,24 @@ G_DEFINE_TYPE(SudokuCell, sudoku_cell, GTK_TYPE_DRAWING_AREA);
 
 static void sudoku_cell_set_val(SudokuCell *cell, int val, int mode);
 static int sudoku_cell_get_val(SudokuCell *cell);
-static gboolean sudoku_cell_expose(GtkWidget *widget,
-				   GdkEventExpose *event);
-static void sudoku_cell_size_request(GtkWidget *widget,
-				     GtkRequisition *requisition);
+static gboolean sudoku_cell_draw(GtkWidget *widget,
+				 cairo_t *cr);
+static void sudoku_cell_get_preferred_width(GtkWidget *widget,
+					    gint *minimal_width,
+					    gint *natural_width);
+static void sudoku_cell_get_preferred_height(GtkWidget *widget,
+					     gint *minimal_width,
+					     gint *natural_width);
+#if defined SQUARE
+static void sudoku_cell_get_preferred_width_for_height(GtkWidget *widget,
+						       gint height,
+						       gint *minimal_width,
+						       gint *natural_width);
+static void sudoku_cell_get_preferred_height_for_width(GtkWidget *widget,
+						       gint width,
+						       gint *minimal_height,
+						       gint *natural_height);
+#endif
 static gboolean sudoku_cell_focus_in(GtkWidget *widget,
 				     GdkEventFocus *event);
 static gboolean sudoku_cell_focus_out(GtkWidget *widget,
@@ -85,8 +99,18 @@ sudoku_cell_class_init(SudokuCellClass *klass)
   klass->set_val = sudoku_cell_set_val;
   klass->get_val = sudoku_cell_get_val;
   /* GtkWidget signals */
-  widget_class->expose_event = sudoku_cell_expose;
-  widget_class->size_request = sudoku_cell_size_request;
+  widget_class->draw = sudoku_cell_draw;
+  widget_class->get_preferred_width = sudoku_cell_get_preferred_width;
+  widget_class->get_preferred_height = sudoku_cell_get_preferred_height;
+#if defined SQUARE
+  widget_class->get_preferred_width_for_height =
+    sudoku_cell_get_preferred_width_for_height;
+  widget_class->get_preferred_height_for_width =
+    sudoku_cell_get_preferred_height_for_width;
+  /* To do: add signals for
+     GtkWidgetClass.get_preferred_height_for_width() and
+     GtkWidgetClass.get_preferred_width_for_height(). */
+#endif
   widget_class->focus_in_event = sudoku_cell_focus_in;
   widget_class->focus_out_event = sudoku_cell_focus_out;
   widget_class->button_press_event = sudoku_cell_button_press;
@@ -103,7 +127,7 @@ sudoku_cell_init(SudokuCell *cell)
   priv->mode = 0;
   GtkWidget *widget = GTK_WIDGET(cell);	/* Set background */
   gtk_widget_ensure_style(widget); /* color to white */
-  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, 
+  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL,
 		       &gtk_widget_get_style(widget)->white);
 }
 
@@ -116,7 +140,7 @@ sudoku_cell_size_request(GtkWidget *widget,
 {
   gtk_widget_ensure_style(widget);
   PangoLayout *layout = gtk_widget_create_pango_layout(widget, "0");
-  pango_layout_set_font_description(layout, 
+  pango_layout_set_font_description(layout,
 				    gtk_widget_get_style(widget)->font_desc);
   int width, height;
   pango_layout_get_pixel_size(layout, &width, &height);
@@ -125,18 +149,58 @@ sudoku_cell_size_request(GtkWidget *widget,
 }
 
 static void
+sudoku_cell_get_preferred_width(GtkWidget *widget,
+				gint *minimal_width,
+				gint *natural_width)
+{
+  GtkRequisition requisition;
+  sudoku_cell_size_request (widget, &requisition);
+  *minimal_width = *natural_width = requisition.width;
+}
+
+static void
+sudoku_cell_get_preferred_height(GtkWidget *widget,
+				 gint *minimal_height,
+				 gint *natural_height)
+{
+  GtkRequisition requisition;
+  sudoku_cell_size_request (widget, &requisition);
+  *minimal_height = *natural_height = requisition.height;
+}
+
+#if defined SQUARE
+static void
+sudoku_cell_get_preferred_height_for_width(GtkWidget *widget,
+					   gint width,
+					   gint *minimal_height,
+					   gint *natural_height)
+{
+  *minimal_height = *natural_height = width;
+}
+
+static void
+sudoku_cell_get_preferred_width_for_height(GtkWidget *widget,
+					   gint height,
+					   gint *minimal_width,
+					   gint *natural_width)
+{
+  *minimal_width = *natural_width = height;
+}
+#endif
+
+static void
 sudoku_cell_redraw_canvas(SudokuCell *cell)
 {
   GtkWidget *widget = GTK_WIDGET(cell);
   if (!gtk_widget_get_window(widget)) return;
 
-  GdkRegion *region = 
-    gdk_drawable_get_clip_region(gtk_widget_get_window(widget));
+  cairo_region_t *region =
+    gdk_window_get_clip_region(gtk_widget_get_window(widget));
   /* redraw the cairo canvas completely by exposing it */
   gdk_window_invalidate_region(gtk_widget_get_window(widget), region, TRUE);
   gdk_window_process_updates(gtk_widget_get_window(widget), TRUE);
 
-  gdk_region_destroy(region);
+  cairo_region_destroy(region);
 }
 
 static void
@@ -173,7 +237,7 @@ sudoku_cell_focus_in(GtkWidget *widget, GdkEventFocus *event)
 static gboolean
 sudoku_cell_focus_out(GtkWidget *widget, GdkEventFocus *event)
 {
-  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL, 
+  gtk_widget_modify_bg(widget, GTK_STATE_NORMAL,
 		       &gtk_widget_get_style(widget)->white);
   sudoku_cell_redraw_canvas(SUDOKU_CELL(widget));
   return FALSE;
@@ -237,7 +301,7 @@ sudoku_cell_key_press(GtkWidget *widget, GdkEventKey *event)
       return pressed_key(widget, priv, 0);
     }
   }
-  return gtk_bindings_activate_event(GTK_OBJECT(widget), event);
+  return gtk_bindings_activate_event(G_OBJECT(widget), event);
 }
 
 /* Sudoku Cell drawing routines. */
@@ -478,15 +542,11 @@ draw(GtkWidget *widget, cairo_t *cr)
     }
 }
 
+// Adds a return value to draw(GtkWidget *, cairo_t *).
 static gboolean
-sudoku_cell_expose(GtkWidget *widget, GdkEventExpose *event)
+sudoku_cell_draw(GtkWidget *widget, cairo_t *cr)
 {
-  cairo_t *cr = gdk_cairo_create(gtk_widget_get_window(widget));
-  cairo_rectangle(cr, event->area.x, event->area.y,
-		  event->area.width, event->area.height);
-  cairo_clip(cr);
   draw(widget, cr);
-  cairo_destroy(cr);
   return FALSE;
 }
 
