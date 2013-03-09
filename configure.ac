@@ -12,9 +12,9 @@ AC_STDC_HEADERS
 
 # Add warning when using GCC
 if test "X$GCC" = Xyes ; then
-  CFLAGS="$CFLAGS -Wall"
+#  CFLAGS="$CFLAGS -Wall"
 # The program was developed with:
-# CFLAGS="$CFLAGS -Wall -std=iso9899:1999 -Wstrict-prototypes -Wpointer-arith"
+  CFLAGS="$CFLAGS -Wall -std=iso9899:1999 -Wstrict-prototypes -Wpointer-arith"
 fi
 
 AC_PROG_RANLIB
@@ -25,7 +25,7 @@ AC_ARG_VAR([WINDRES], [Path to the windres when available])
 AC_PATH_PROG([WINDRES], [windres])
 AM_CONDITIONAL([HAVE_WINDRES], [test -n "$WINDRES"])
 
-AM_PATH_GTK_2_0(2.24.0,, [AC_MSG_ERROR([Cannot find GTK+])])
+AM_PATH_GTK_3_0(3.4.0,, [AC_MSG_ERROR([Cannot find GTK+])])
 
 AC_CONFIG_FILES([Makefile gtksudoku.spec src/Makefile
 			  debian/Makefile debian/changelog.Debian
