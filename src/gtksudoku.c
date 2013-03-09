@@ -350,7 +350,8 @@ main(int argc, char *argv[])
   list = g_list_prepend(list, pixbuf);
   gtk_window_set_default_icon_list(list);
 
-  GtkWidget *box = gtk_vbox_new(FALSE, 0);
+  // To do: Switch from GtkBox to GtkGrid
+  GtkWidget *box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 0);
   gtk_container_add(GTK_CONTAINER(window), box);
 
   /* Menu */
