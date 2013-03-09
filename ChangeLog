@@ -1,3 +1,12 @@
+2013-03-09  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/sudokucell.c:  Replaced expose_event and size_request
+	signals with their GTK 3.0 equivalents.  Replaced GtkRegion with
+	cairo equivalent.  Compilation and a simple run succeeds.
+
+	* src/gtksudoku.c (main):  Changed gtk_vbox_new to gtk_box_new for
+	GTK 3.0.
+
 2012-06-28  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* configure.ac: Added AM_PROG_CC_C_O for because of the use of
