@@ -47,7 +47,10 @@ show_text(GtkWidget *window, const char *text)
   gtk_scrolled_window_set_policy(GTK_SCROLLED_WINDOW(sw),
 				 GTK_POLICY_NEVER,
 				 GTK_POLICY_AUTOMATIC);
-  gtk_container_add(GTK_CONTAINER(content_area), sw);
+  gtk_container_add_with_properties(GTK_CONTAINER(content_area), sw,
+				    "expand", TRUE,
+				    "fill", TRUE,
+				    NULL);
 
   view = gtk_text_view_new();
   gtk_text_view_set_wrap_mode(GTK_TEXT_VIEW(view), GTK_WRAP_WORD);
