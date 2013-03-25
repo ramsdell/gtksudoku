@@ -84,19 +84,10 @@ sudoku_edit_dialog(GtkWidget *window, const char *board)
 #endif
   SudokuBoard *grid = SUDOKU_BOARD(widget);
   sudoku_dialog_set(grid, board);
-  gtk_container_add(GTK_CONTAINER(content_area), widget);
-  /*
-  gtk_container_child_set(GTK_CONTAINER(content_area),
-			  widget,
-			  "expand",
-			  GTK_EXPAND,
-			  NULL);
-  gtk_container_child_set(GTK_CONTAINER(content_area),
-			  widget,
-			  "fill",
-			  GTK_FILL,
-			  NULL);
-  */
+  gtk_container_add_with_properties(GTK_CONTAINER(content_area), widget,
+				    "expand", TRUE,
+				    "fill", TRUE,
+				    NULL);
   gtk_widget_show_all(widget);
   char *result = NULL;
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY) {
