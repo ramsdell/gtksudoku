@@ -1,3 +1,14 @@
+2013-03-25  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/gtksudoku.h (SUDOKU_BOARD_MIN_ASPECT)
+	(SUDOKU_BOARD_MAX_ASPECT): Added constraints on the aspect ratios
+	of sudoku boards.
+
+2013-03-24  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/sudokuedit.c (sudoku_edit_dialog): Set expand and fill
+	properties to true on the board that makes up the content.
+
 2013-03-09  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* src/sudokucell.c:  Replaced expose_event and size_request
@@ -13,7 +24,6 @@
 	per-target flags.
 
 	* git: Tagged as gtksudoku-0.6 with tag v0.6.
-
 
 2012-06-23  John D. Ramsdell  <ramsdell@mitre.org>
 
@@ -75,7 +85,7 @@
 	propagate_elimination, as each of these strategies is supposed to
 	implement just one step.  See "help impatient" for the multi-step
 	strategies.
-	
+
 	* src/sudoku.lua (Board:propagate_all_singletons): Added a loop so
 	that the strategy ensures no singletons are left after it is
 	applied.

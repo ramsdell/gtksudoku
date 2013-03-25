@@ -237,7 +237,7 @@ help_intro(void)
 
 static const char license[] =
   "Copyright (C) 2006 John D. Ramsdell for the non-Lua parts.  "
-  "Copyright (C) 1994-2006 Lua.org, PUC-Rio for the Lua parts." 
+  "Copyright (C) 1994-2006 Lua.org, PUC-Rio for the Lua parts."
   "\n\n"
   PACKAGE_NAME " License"
   "\n\n"
@@ -366,12 +366,15 @@ main(int argc, char *argv[])
   GtkWidget *cell = sudoku_board_new(FALSE);
   board = SUDOKU_BOARD(cell);
   gtk_box_pack_start(GTK_BOX(box), cell, TRUE, TRUE, 0);
+#if defined SUDOKU_BOARD_MIN_ASPECT || defined SUDOKU_BOARD_MAX_ASPECT
   GdkGeometry hints;
-  hints.min_aspect = hints.max_aspect = 1.0;
+  hints.min_aspect = SUDOKU_BOARD_MIN_ASPECT;
+  hints.max_aspect = SUDOKU_BOARD_MAX_ASPECT;
   gtk_window_set_geometry_hints(GTK_WINDOW(window),
 				GTK_WIDGET(board),
 				&hints,
 				GDK_HINT_ASPECT);
+#endif
   GtkWidget *widget = gtk_entry_new();
   gtk_widget_set_can_focus(widget, FALSE);
   gtk_editable_set_editable(GTK_EDITABLE(widget), FALSE);
