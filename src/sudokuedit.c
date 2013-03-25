@@ -88,6 +88,12 @@ sudoku_edit_dialog(GtkWidget *window, const char *board)
 				    "expand", TRUE,
 				    "fill", TRUE,
 				    NULL);
+  GdkGeometry hints;
+  hints.min_aspect = hints.max_aspect = 1.0;
+  gtk_window_set_geometry_hints(GTK_WINDOW(dialog),
+				GTK_WIDGET(board),
+				&hints,
+				GDK_HINT_ASPECT);
   gtk_widget_show_all(widget);
   char *result = NULL;
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_APPLY) {

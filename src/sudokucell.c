@@ -60,16 +60,6 @@ static void sudoku_cell_get_preferred_width(GtkWidget *widget,
 static void sudoku_cell_get_preferred_height(GtkWidget *widget,
 					     gint *minimal_width,
 					     gint *natural_width);
-#if defined SQUARE
-static void sudoku_cell_get_preferred_width_for_height(GtkWidget *widget,
-						       gint height,
-						       gint *minimal_width,
-						       gint *natural_width);
-static void sudoku_cell_get_preferred_height_for_width(GtkWidget *widget,
-						       gint width,
-						       gint *minimal_height,
-						       gint *natural_height);
-#endif
 static gboolean sudoku_cell_focus_in(GtkWidget *widget,
 				     GdkEventFocus *event);
 static gboolean sudoku_cell_focus_out(GtkWidget *widget,
@@ -102,15 +92,6 @@ sudoku_cell_class_init(SudokuCellClass *klass)
   widget_class->draw = sudoku_cell_draw;
   widget_class->get_preferred_width = sudoku_cell_get_preferred_width;
   widget_class->get_preferred_height = sudoku_cell_get_preferred_height;
-#if defined SQUARE
-  widget_class->get_preferred_width_for_height =
-    sudoku_cell_get_preferred_width_for_height;
-  widget_class->get_preferred_height_for_width =
-    sudoku_cell_get_preferred_height_for_width;
-  /* To do: add signals for
-     GtkWidgetClass.get_preferred_height_for_width() and
-     GtkWidgetClass.get_preferred_width_for_height(). */
-#endif
   widget_class->focus_in_event = sudoku_cell_focus_in;
   widget_class->focus_out_event = sudoku_cell_focus_out;
   widget_class->button_press_event = sudoku_cell_button_press;
@@ -167,26 +148,6 @@ sudoku_cell_get_preferred_height(GtkWidget *widget,
   sudoku_cell_size_request (widget, &requisition);
   *minimal_height = *natural_height = requisition.height;
 }
-
-#if defined SQUARE
-static void
-sudoku_cell_get_preferred_height_for_width(GtkWidget *widget,
-					   gint width,
-					   gint *minimal_height,
-					   gint *natural_height)
-{
-  *minimal_height = *natural_height = width;
-}
-
-static void
-sudoku_cell_get_preferred_width_for_height(GtkWidget *widget,
-					   gint height,
-					   gint *minimal_width,
-					   gint *natural_width)
-{
-  *minimal_width = *natural_width = height;
-}
-#endif
 
 static void
 sudoku_cell_redraw_canvas(SudokuCell *cell)
