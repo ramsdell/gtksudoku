@@ -12,9 +12,9 @@ AC_STDC_HEADERS
 
 # Add warning when using GCC
 if test "X$GCC" = Xyes ; then
-#  CFLAGS="$CFLAGS -Wall"
+  CFLAGS="$CFLAGS -Wall"
 # The program was developed with:
-  CFLAGS="$CFLAGS -Wall -std=iso9899:1999 -Wstrict-prototypes -Wpointer-arith"
+# CFLAGS="$CFLAGS -Wall -std=iso9899:1999 -Wstrict-prototypes -Wpointer-arith"
 fi
 
 AC_PROG_RANLIB
