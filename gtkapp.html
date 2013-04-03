@@ -1,0 +1,179 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"><head>
+
+  <meta http-equiv="content-type" content="text/html; charset=iso-8859-1"/><title>Cross-Platform GTK+ Applications: A Newcomers Perspective</title>
+
+  <meta name="generator" content="amaya 8.8.5, see http://www.w3.org/Amaya/"/></head><body>
+<p>In this article <a href="http://www.ccs.neu.edu/home/ramsdell">John
+D. Ramsdell</a> describes cross-platform GTK+ application development
+from a newcomers perspective.</p>
+
+<h1>Cross-Platform GTK+ Applications: A Newcomers Perspective</h1>
+
+<p>Partially in an effort to sharpen my programming skills, I wrote a game
+using a GUI framework with which I was not previously familiar, and ported it
+to several platforms. The framework selected was <a href="http://www.gtk.org/">The GIMP Toolkit</a>, and the application was a
+puzzle solving aid called <a href="http://luaforge.net/projects/gtksudoku">GTK Sudoku</a>. This article
+describes my experience, focusing on the lessons learned that I hope will be
+of use to other newcomers.</p>
+
+<p>The criteria for selecting a GUI framework were four in number. (1) The
+framework had to support cross-platform development. (2) The framework had to
+be one that I have never used, otherwise, I wouldn't learn as much. This
+eliminated <a href="http://www.fltk.org/">FLTK</a> and <a href="http://www.wxwidgets.org/">wxWidgets</a>. (3) For my tastes, C is
+preferred over C++. (4) GTK Sudoku was to be scalable in the sense that size
+of the default font determines the size of each window and widget, not the
+resolution of the display. The Cairo vector graphics library was of great
+help meeting this criterion.</p>
+
+<p>A Sodoku logic puzzle is solved by filling each cell in a board so that
+every row, column, and 3x3 square contains the digits one through nine. GTK
+Sudoku eliminates much of the drudgery of solving a puzzle and provides
+educational tips should the path to the solution become obscured. It is
+different from most other programs in this category, because users specify
+the rule that justifies each change to the Sudoku board. The program will
+fail to apply a rule if its preconditions are not met, thus detecting silly
+mistakes early.</p>
+
+<p>Before I list the lessons learned from this project, let me set the
+context. GTK Sudoku was constructed by wrapping a GUI around a formerly
+text-based application, written as a <a href="http://www.lua.org/">Lua</a>
+script. Lua is a lightweight, easily embeddable scripting language that is
+popular with game developers. The Lua interpreter is also available as a
+stand-alone program, and users can interact with scripts using a
+read-eval-print loop. I've been using and tinkering with my Lua Sudoku script
+for over a year, but there aren't too many other people who are willing to
+type Lua function calls into a command-line interpreter for each game
+interaction. The addition of a GUI was required if wanted to share my take on
+this game.</p>
+
+<p>Embedding the Lua script was quick and easy. It was naturally encapsulated
+in a C module that exports four functions and imports three. The major change
+to the Lua script was the addition of a help system, which was unnecessary
+when I was the only user.</p>
+
+<p>The only tricky section of the GUI was the part that displays the board. A
+Sudoku board is a 9x9 array of cells grouped into 3x3 squares. In the
+preferred way of presenting a board, a line is drawn on each edge of a cell,
+and the boundaries of the 3x3 squares are drawn with thicker lines to
+distinguish them from the other cell boundaries.</p>
+
+<p>The board is implemented as a widget that extends a GtkTable, and provides a
+9x9 table of cells. Each cell is a widget that extends a GtkDrawingArea. The
+board widget ensures there is no space between the cell widgets, and that
+each cell has the same size. Cairo is used to make each cell dynamically
+resizable, and to draw the boundary lines seen by the user. The boundary
+lines drawn by each cell depends on the position. Alternatives had to be
+explored before this solution was found.</p>
+
+<p>GTK Sudoku was developed on GNU/Linux with Emacs. I had trouble finding
+documentation on versions of GTK+ that include Cairo. There were three steps
+that resolved this issue. (1) I found, and carefully studied Davyd Madeley's
+<a href="http://gnomejournal.org/article/34/writing-a-widget-using-cairo-and-gtk28">article</a>
+on writing widgets using Cairo. (2) I bookmarked and frequently referred to
+the HTML documents in <code>/usr/share/gtk-doc/html</code>. (3) The key step
+was to expand the three source tarballs that make up GTK+, and create an
+Emacs tags file for all the C source and header files. I found the
+sources adhere to a consistent style, which helps one navigate them.</p>
+
+<p>GTK Sudoku is built using the GNU Build Tools, and about all you have to
+do to make your system aware of GTK+ is add the following to your
+<code>configure.ac</code> file</p>
+
+<blockquote>
+  <pre>AM_PATH_GTK_2_0(2.8.0,, [AC_MSG_ERROR([Cannot find GTK+])])</pre>
+</blockquote>
+
+<p>and <code>@GTK_CFLAGS@</code> and <code>@GTK_LIBS@</code> to your
+<code>Makefile.am</code>.</p>
+
+<p>The use of the GNU Build Tools made it trivial to move GTK Sudoku to
+different GNU/Linux distributions, and an Intel Mac. On the Mac, I installed
+the version of X11 that came with the machine, and used DarwinPorts to install
+gtk2. GTK Sudoku then builds as it does on GNU/Linux. Writing ones own
+portfile is also quite easy. In addition to filling in the required fields,
+one only need add:</p>
+
+<blockquote>
+  <pre>depends_lib              port:gtk2</pre>
+</blockquote>
+
+<p>Porting GTK Sudoku to Windows was challenging. Creating a GTK+ development
+environment on top of <a href="http://www.mingw.org/">MinGW</a> and MSYS is quite
+different that doing so for the other GUI frameworks I have used. For
+example, with FLTK, one can download the sources, and easily build and
+install the framework. Being able to build from the sources allows you
+to statically link your application, easing deployment.</p>
+
+<p>GTK+ depends on a number of packages that are not part of the standard
+MinGW or MSYS runtime environment. Assembling a development environment from
+precompiled binaries is painful enough to cause one to avoid using the
+sources. Additionally, there are technical reasons that make it very
+difficult to build an environment that allows static linking of GTK+
+applications. As a result, many developers simply download the collection of
+archives made available by Tor Lillqvist. This distribution is of great use
+to newcomers, and is something I am thankful for. There are, however,
+challenges to be overcome when using this distribution.</p>
+
+<p>The use of the GNU Build Tools made it trivial to move GTK Sudoku
+on non-Windows platforms, but on Windows, it was more difficult a GTK+
+application than it is to move an FLTK or wxWindows application. If
+you follow the recommendations in the FLTK and wxWidgets
+documentation, your build system will work unmodified on all systems,
+including MSYS. On only MSYS, the link command requires the
+<code>-mwindows</code> option, which is added by the GUI framework's
+configure script; however, the GTK+ configure script omits the
+<code>-mwindows</code> option on MSYS.  I dealt with this problem by
+simply adding the flag to my local copy of
+<code>/usr/local/lib/pkgconfig/gdk-2.0.pc</code>.</p>
+
+<p>Packaging GTK Sudoku for Windows was the real challenge. For Windows,
+there is an installer for GTK+ version 2.8.18, which places a collection of
+DLLs and support files in <code>C:\Program Files\Common Files\GTK\2.0</code>.
+The current Windows development environment provides version 2.8.20. It turns
+out you can run a GTK Sudoku binary created with GTK+ 2.8.20 using a GTK+
+2.8.18 runtime if you add to your source file a definition of the function
+<code>g_type_register_static_simple</code>, a function added to GTK+ after
+version 2.8.18. What a hack, no?</p>
+
+<p>The GTK Sudoku Windows installer is close to the <a href="http://luaforge.net/">LuaForge</a> 10MB limit in file size. This
+is because I had to include all the files in the GTK+ 2.8.18 installer
+into the GTK Sudoku installer. If you install GTK+ 2.8.18 into the
+Common File area, applications such as GAIM stop working.</p>
+
+<p>Once you decide place the runtime in your installer, you can change
+its components.  Tor Lillqvist tells me the better solution to my
+runtime linking problem would have been to update its version of
+GLib to 2.12.</p>
+
+<p>In summary, I was very impressed with GTK+, and especially with Cairo;
+however, porting the GTK+ application to Windows proved challenging, but not
+insurmountable.</p>
+
+<p>This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/2.0/">Creative Commons
+License</a>.</p>
+<!-- /Creative Commons License -->
+<!--
+
+<rdf:RDF xmlns="http://web.resource.org/cc/"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<Work rdf:about="">
+   <dc:type rdf:resource="http://purl.org/dc/dcmitype/Text" />
+   <license rdf:resource="http://creativecommons.org/licenses/by-sa/2.0/" />
+</Work>
+
+<License rdf:about="http://creativecommons.org/licenses/by-sa/2.0/">
+   <permits rdf:resource="http://web.resource.org/cc/Reproduction" />
+   <permits rdf:resource="http://web.resource.org/cc/Distribution" />
+   <requires rdf:resource="http://web.resource.org/cc/Notice" />
+   <requires rdf:resource="http://web.resource.org/cc/Attribution" />
+   <permits rdf:resource="http://web.resource.org/cc/DerivativeWorks" />
+   <requires rdf:resource="http://web.resource.org/cc/ShareAlike" />
+</License>
+
+</rdf:RDF>
+
+-->
+
+</body></html>

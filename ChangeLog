@@ -1,3 +1,7 @@
+2013-04-03  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* Makefile.am (EXTRA_DIST): Added gtkapp.html to the distribution.
+
 2013-03-25  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* src/gtksudoku.h (SUDOKU_BOARD_MIN_ASPECT)
