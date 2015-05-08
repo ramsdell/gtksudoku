@@ -63,12 +63,8 @@ show_text(GtkWidget *window, const char *text)
 
   /* Use font metrics to set the size of the text view. */
 
-  gtk_widget_ensure_style(view);
   PangoContext *context = gtk_widget_get_pango_context(view);
-  PangoFontMetrics *metrics;
-  metrics = pango_context_get_metrics(context,
-				      gtk_widget_get_style(view)->font_desc,
-				      pango_context_get_language(context));
+  PangoFontMetrics *metrics = pango_context_get_metrics(context, NULL, NULL);
   gint char_width = pango_font_metrics_get_approximate_char_width(metrics);
   gint ascent = pango_font_metrics_get_ascent(metrics);
   gint descent = pango_font_metrics_get_descent(metrics);
@@ -77,7 +73,7 @@ show_text(GtkWidget *window, const char *text)
 
   gtk_text_view_set_left_margin(GTK_TEXT_VIEW(view), 2 * width);
   gtk_text_view_set_right_margin(GTK_TEXT_VIEW(view), 2 * width);
-  gtk_widget_set_size_request(view, 70 * width, 15 * height);
+  gtk_window_set_default_size(GTK_WINDOW(dialog), 70 * width, 20 * height);
 
   gtk_container_add(GTK_CONTAINER(sw), view);
 
