@@ -35,7 +35,7 @@ show_text(GtkWidget *window, const char *text)
   dialog = gtk_dialog_new_with_buttons(PACKAGE_NAME " Help",
 				       GTK_WINDOW(window),
 				       flags,
-				       GTK_STOCK_CLOSE,
+				       "_Close",
 				       GTK_RESPONSE_CANCEL,
 				       NULL);
   content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));

@@ -178,8 +178,8 @@ open_file(void)
   dialog = gtk_file_chooser_dialog_new("Open File",
 				       GTK_WINDOW(window),
 				       GTK_FILE_CHOOSER_ACTION_OPEN,
-				       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				       GTK_STOCK_OPEN, GTK_RESPONSE_ACCEPT,
+				       "_Cancel", GTK_RESPONSE_CANCEL,
+				       "_Open", GTK_RESPONSE_ACCEPT,
 				       NULL);
   if (gtk_dialog_run(GTK_DIALOG(dialog)) == GTK_RESPONSE_ACCEPT) {
     char *filename = gtk_file_chooser_get_filename(GTK_FILE_CHOOSER(dialog));
@@ -196,8 +196,8 @@ save_file_as(void)
   dialog = gtk_file_chooser_dialog_new("Save File",
 				       GTK_WINDOW(window),
 				       GTK_FILE_CHOOSER_ACTION_SAVE,
-				       GTK_STOCK_CANCEL, GTK_RESPONSE_CANCEL,
-				       GTK_STOCK_SAVE, GTK_RESPONSE_ACCEPT,
+				       "_Cancel", GTK_RESPONSE_CANCEL,
+				       "_Save", GTK_RESPONSE_ACCEPT,
 				       NULL);
   gtk_file_chooser_set_do_overwrite_confirmation(GTK_FILE_CHOOSER(dialog),
 						 TRUE);
@@ -286,15 +286,15 @@ help_about(void)
 static GtkActionEntry main_entries[] = {
   {"FileMenu", 0, "_File"},
   {"HelpMenu", 0, "_Help"},
-  {"Open", GTK_STOCK_OPEN, "_Open", "<control>O",
+  {"Open", "_Open", "_Open", "<control>O",
    "Open a file and load board", open_file},
-  {"SaveAs", GTK_STOCK_SAVE_AS, "Save _As", "<control>S",
+  {"SaveAs", "Save _As", "Save _As", "<control>S",
    "Save a board in a file", save_file_as},
-  {"Quit", GTK_STOCK_QUIT, "_Quit", "<control>Q",
+  {"Quit", "_Quit", "_Quit", "<control>Q",
    "Quit the program", gtk_main_quit},
-  {"Intro", GTK_STOCK_HELP, "_Intro", "<control>I",
+  {"Intro", "_Intro", "_Intro", "<control>I",
    "Help about this program", help_intro},
-  {"About", GTK_STOCK_ABOUT, "_About", "<control>A",
+  {"About", "_About", "_About", "<control>A",
    "About this program", help_about},
 };
 

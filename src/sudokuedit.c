@@ -71,9 +71,9 @@ sudoku_edit_dialog(GtkWidget *window, const char *board)
   GtkWidget *dialog = gtk_dialog_new_with_buttons(PACKAGE_NAME " Editor",
 						  GTK_WINDOW(window),
 						  flags,
-						  GTK_STOCK_APPLY,
+						  "_Apply",
 						  GTK_RESPONSE_APPLY,
-						  GTK_STOCK_CANCEL,
+						  "_Cancel",
 						  GTK_RESPONSE_CANCEL,
 						  NULL);
   GtkWidget *content_area = gtk_dialog_get_content_area(GTK_DIALOG(dialog));
