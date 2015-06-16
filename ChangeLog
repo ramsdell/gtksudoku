@@ -1,3 +1,14 @@
+2015-06-15  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/sudokuedit.c (sudoku_edit_dialog):  Set second argument to
+	gtk_window_set_geometry_hints to NULL, to stop a crash that
+	occurred when the edit window was brought up for a second time.
+
+2015-05-07  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/showtext.c (show_text): Fixed dialog start up size problem.
+	Dialogs used to start with height that was too small.
+
 2013-04-03  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* Makefile.am (EXTRA_DIST): Added gtkapp.html to the distribution.

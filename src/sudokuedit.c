@@ -93,7 +93,7 @@ sudoku_edit_dialog(GtkWidget *window, const char *board)
   hints.min_aspect = SUDOKU_BOARD_MIN_ASPECT;
   hints.max_aspect = SUDOKU_BOARD_MAX_ASPECT;
   gtk_window_set_geometry_hints(GTK_WINDOW(window),
-				GTK_WIDGET(board),
+				NULL,
 				&hints,
 				GDK_HINT_ASPECT);
 #endif
