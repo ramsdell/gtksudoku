@@ -1,3 +1,8 @@
+2015-07-13  John D. Ramsdell  <ramsdell@mitre.org>
+
+	* src/sudokucell.c (sudoku_cell_size_request): Set the width and
+	the height to three times the maximum vertical extent of the font.
+
 2015-06-15  John D. Ramsdell  <ramsdell@mitre.org>
 
 	* src/sudokuedit.c (sudoku_edit_dialog):  Set second argument to

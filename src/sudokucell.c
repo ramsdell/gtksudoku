@@ -113,7 +113,7 @@ sudoku_cell_init(SudokuCell *cell)
 }
 
 /* Use the font metrics of the default font to determine the size of a
-   cell.  Set the width and the height to two times the maximum
+   cell.  Set the width and the height to three times the maximum
    vertical extent of the font. */
 static void
 sudoku_cell_size_request(GtkWidget *widget,
@@ -126,7 +126,7 @@ sudoku_cell_size_request(GtkWidget *widget,
   int width, height;
   pango_layout_get_pixel_size(layout, &width, &height);
   g_object_unref(layout);
-  requisition->width = requisition->height = 2 * height;
+  requisition->width = requisition->height = 3 * height;
 }
 
 static void
